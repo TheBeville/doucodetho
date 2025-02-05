@@ -12,6 +12,14 @@ class LoginForm extends StatefulWidget {
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String? _validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some text';
+    }
+    return null;
+  }
 
   @override
   void dispose() {
@@ -22,67 +30,66 @@ class _LoginFormState extends State<LoginForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 25),
-      child: Column(
-        children: [
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Email',
+    return Form(
+      key: _formKey,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 25),
+        child: Column(
+          children: [
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Email',
+              ),
+              controller: emailController,
+              validator: _validator,
             ),
-            controller: emailController,
-          ),
-          SizedBox(height: 10),
-          TextField(
-            decoration: InputDecoration(
-              hintText: 'Password',
+            SizedBox(height: 10),
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: 'Password',
+              ),
+              controller: passwordController,
+              validator: _validator,
             ),
-            controller: passwordController,
-          ),
-          SizedBox(height: 25),
-          FilledButton(
-            style: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all(Colors.green),
-              fixedSize: WidgetStateProperty.all(Size(355, 50)),
-              shape: WidgetStateProperty.all(
-                RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(6),
+            SizedBox(height: 25),
+            FilledButton(
+              style: ButtonStyle(
+                backgroundColor: WidgetStateProperty.all(Colors.green),
+                fixedSize: WidgetStateProperty.all(Size(355, 50)),
+                shape: WidgetStateProperty.all(
+                  RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                ),
+              ),
+              onPressed: () {
+                // TODO: finish Form validation
+                if (_formKey.currentState!.validate()) {
+                  locator<AuthService>().signInWithEmail(
+                    emailController.text,
+                    passwordController.text,
+                  );
+                  // TODO: Navigate to HomeView after successful login
+                  return;
+                }
+              },
+              child: Text(
+                'Log In',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
-            onPressed: () {
-              if (emailController.text.isEmpty ||
-                  passwordController.text.isEmpty) {
-                ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(
-                    content: Text('Fill in all fields'),
-                    duration: Duration(seconds: 1),
-                  ),
-                );
-                return;
-              }
-              locator<AuthService>().signInWithEmail(
-                emailController.text,
-                passwordController.text,
-              );
-              // TODO: Navigate to HomeView after successful login
-            },
-            child: Text(
-              'Log In',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
+            TextButton(
+              onPressed: () {},
+              child: Text(
+                'Forgotten your password?',
+                style: TextStyle(fontSize: 18, color: Colors.blueAccent),
               ),
             ),
-          ),
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              'Forgotten your password?',
-              style: TextStyle(fontSize: 18, color: Colors.blueAccent),
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

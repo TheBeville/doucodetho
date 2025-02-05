@@ -15,6 +15,14 @@ class _SignupFormState extends State<SignupForm> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController confirmPasswordController =
       TextEditingController();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
+  String? _validator(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter some text';
+    }
+    return null;
+  }
 
   @override
   void dispose() {
@@ -27,38 +35,43 @@ class _SignupFormState extends State<SignupForm> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
+    return Form(
+      key: _formKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 25),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            TextField(
+            TextFormField(
               decoration: InputDecoration(
                 hintText: 'Email',
               ),
               controller: emailController,
+              validator: _validator,
             ),
             SizedBox(height: 10),
-            TextField(
+            TextFormField(
               decoration: InputDecoration(
-                hintText: 'Username',
+                hintText: 'Display Name',
               ),
               controller: usernameController,
+              validator: _validator,
             ),
             SizedBox(height: 10),
-            TextField(
+            TextFormField(
               decoration: InputDecoration(
                 hintText: 'Password',
               ),
               controller: passwordController,
+              validator: _validator,
             ),
             SizedBox(height: 10),
-            TextField(
+            TextFormField(
               decoration: InputDecoration(
                 hintText: 'Confirm Password',
               ),
               controller: confirmPasswordController,
+              validator: _validator,
             ),
             SizedBox(height: 25),
             FilledButton(
@@ -76,26 +89,31 @@ class _SignupFormState extends State<SignupForm> {
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
               onPressed: () {
-                if (passwordController.text != confirmPasswordController.text) {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Passwords do not match'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                  return;
-                } else {
-                  locator<AuthService>().signUpWithEmail(
-                    emailController.text,
-                    passwordController.text,
-                  );
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content: Text('Sign up successful'),
-                      duration: Duration(seconds: 1),
-                    ),
-                  );
-                  // TODO: Navigate to LoginView after successful sign up
+                // TODO: finish Form validation
+                if (_formKey.currentState!.validate()) {
+                  if (passwordController.text !=
+                      confirmPasswordController.text) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Passwords do not match'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                    return;
+                  } else {
+                    locator<AuthService>().signUpWithEmailAndPass(
+                      emailController.text,
+                      usernameController.text,
+                      passwordController.text,
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('Sign up successful'),
+                        duration: Duration(seconds: 1),
+                      ),
+                    );
+                    // TODO: Navigate to LoginView after successful sign up
+                  }
                 }
               },
             ),
