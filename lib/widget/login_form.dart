@@ -1,0 +1,89 @@
+import 'package:doucodetho/auth/auth_service.dart';
+import 'package:doucodetho/locator.dart';
+import 'package:flutter/material.dart';
+
+class LoginForm extends StatefulWidget {
+  const LoginForm({super.key});
+
+  @override
+  State<LoginForm> createState() => _LoginFormState();
+}
+
+class _LoginFormState extends State<LoginForm> {
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 25),
+      child: Column(
+        children: [
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Email',
+            ),
+            controller: emailController,
+          ),
+          SizedBox(height: 10),
+          TextField(
+            decoration: InputDecoration(
+              hintText: 'Password',
+            ),
+            controller: passwordController,
+          ),
+          SizedBox(height: 25),
+          FilledButton(
+            style: ButtonStyle(
+              backgroundColor: WidgetStateProperty.all(Colors.green),
+              fixedSize: WidgetStateProperty.all(Size(355, 50)),
+              shape: WidgetStateProperty.all(
+                RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(6),
+                ),
+              ),
+            ),
+            onPressed: () {
+              if (emailController.text.isEmpty ||
+                  passwordController.text.isEmpty) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Fill in all fields'),
+                    duration: Duration(seconds: 1),
+                  ),
+                );
+                return;
+              }
+              locator<AuthService>().signInWithEmail(
+                emailController.text,
+                passwordController.text,
+              );
+              // TODO: Navigate to HomeView after successful login
+            },
+            child: Text(
+              'Log In',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'Forgotten your password?',
+              style: TextStyle(fontSize: 18, color: Colors.blueAccent),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
