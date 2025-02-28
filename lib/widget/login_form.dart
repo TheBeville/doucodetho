@@ -21,6 +21,25 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
+  void _onLoginButtonPressed() {
+    if (_formKey.currentState!.validate()) {
+      try {
+        locator<AuthService>().logInWithEmail(
+          email: emailController.text,
+          password: passwordController.text,
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('$e'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+      return;
+    }
+  }
+
   @override
   void dispose() {
     emailController.dispose();
@@ -62,17 +81,7 @@ class _LoginFormState extends State<LoginForm> {
                   ),
                 ),
               ),
-              onPressed: () {
-                // TODO: finish Form validation
-                if (_formKey.currentState!.validate()) {
-                  locator<AuthService>().signInWithEmail(
-                    emailController.text,
-                    passwordController.text,
-                  );
-                  // TODO: Navigate to HomeView after successful login
-                  return;
-                }
-              },
+              onPressed: _onLoginButtonPressed,
               child: Text(
                 'Log In',
                 style: TextStyle(
@@ -85,7 +94,7 @@ class _LoginFormState extends State<LoginForm> {
               onPressed: () {},
               child: Text(
                 'Forgotten your password?',
-                style: TextStyle(fontSize: 18, color: Colors.blueAccent),
+                style: TextStyle(fontSize: 18, color: Colors.green),
               ),
             ),
           ],

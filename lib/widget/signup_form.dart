@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:doucodetho/locator.dart';
 
 class SignupForm extends StatefulWidget {
-  const SignupForm({super.key});
+  final VoidCallback alreadyHaveAnAccount;
+  const SignupForm({super.key, required this.alreadyHaveAnAccount});
 
   @override
   State<SignupForm> createState() => _SignupFormState();
@@ -22,6 +23,36 @@ class _SignupFormState extends State<SignupForm> {
       return 'Please enter some text';
     }
     return null;
+  }
+
+  void _onSignupButtonPressed() async {
+    if (_formKey.currentState!.validate()) {
+      if (passwordController.text != confirmPasswordController.text) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Passwords do not match'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+        return;
+      } else {
+        final result = await locator<AuthService>().signUpWithEmail(
+          email: emailController.text,
+          password: passwordController.text,
+          username: usernameController.text,
+        );
+
+        if (!mounted) return;
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content:
+                Text(result == null ? 'Sign up failed' : 'Sign up successful'),
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    }
   }
 
   @override
@@ -84,41 +115,14 @@ class _SignupFormState extends State<SignupForm> {
                   ),
                 ),
               ),
+              onPressed: _onSignupButtonPressed,
               child: Text(
                 'Create Account',
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
               ),
-              onPressed: () {
-                // TODO: finish Form validation
-                if (_formKey.currentState!.validate()) {
-                  if (passwordController.text !=
-                      confirmPasswordController.text) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Passwords do not match'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                    return;
-                  } else {
-                    locator<AuthService>().signUpWithEmailAndPass(
-                      emailController.text,
-                      usernameController.text,
-                      passwordController.text,
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(
-                        content: Text('Sign up successful'),
-                        duration: Duration(seconds: 1),
-                      ),
-                    );
-                    // TODO: Navigate to LoginView after successful sign up
-                  }
-                }
-              },
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: widget.alreadyHaveAnAccount,
               child: Text(
                 'Already have an account?',
                 style: TextStyle(fontSize: 18, color: Colors.blueAccent),

@@ -1,8 +1,7 @@
-import 'package:doucodetho/consecutive_days_cubit.dart';
-import 'package:doucodetho/db/database_service.dart';
+import 'package:doucodetho/model/streak_data_model.dart';
+import 'package:doucodetho/streak_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:doucodetho/locator.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,18 +11,35 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  bool buttonClicked = false;
   String buttonText = 'Yes!';
 
   @override
+  void initState() {
+    super.initState();
+    context.read<StreakDataCubit>().getStreakData();
+  }
+
+  bool checkDayCompleted() {
+    final DateTime lastUpdated =
+        context.read<StreakDataCubit>().state.lastUpdated;
+    final DateTime today =
+        DateTime.parse(context.read<StreakDataCubit>().getDates()['today']!);
+    print('lastUpdated: $lastUpdated, today: $today');
+    return lastUpdated.isAfter(today);
+  }
+
+  @override
   Widget build(BuildContext context) {
+    // checkDayCompleted() returns true if the day is already completed
+    bool showButton = !checkDayCompleted();
+
     return Scaffold(
-      body: BlocBuilder<ConsecutiveDaysCubit, int>(
-        builder: (context, consecutiveDays) {
+      body: BlocBuilder<StreakDataCubit, StreakData>(
+        builder: (context, streakData) {
           return Center(
             child: Column(
               children: [
-                Spacer(flex: 3),
+                SizedBox(height: 100),
                 Text(
                   'Hello!',
                   style: TextStyle(
@@ -36,16 +52,16 @@ class _HomeViewState extends State<HomeView> {
                   style: TextStyle(
                     fontSize: 26,
                     fontWeight: FontWeight.bold,
+                    fontStyle: FontStyle.italic,
                   ),
                 ),
-                SizedBox(height: 10),
-                !buttonClicked
+                Spacer(flex: 1),
+                showButton
                     ? FilledButton(
                         onPressed: () {
-                          context.read<ConsecutiveDaysCubit>().increment();
-                          locator<DatabaseService>().markDayAsCompleted();
+                          context.read<StreakDataCubit>().incrementStreaks();
                           setState(() {
-                            buttonClicked = true;
+                            showButton = false;
                             buttonText = 'Well done!';
                           });
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -59,9 +75,21 @@ class _HomeViewState extends State<HomeView> {
                           buttonText,
                           style: TextStyle(fontSize: 18),
                         ))
-                    : Text(
-                        buttonText,
-                        style: TextStyle(fontSize: 34, color: Colors.green),
+                    : Column(
+                        children: [
+                          Text(
+                            '🔥',
+                            style: TextStyle(fontSize: 150),
+                          ),
+                          Text(
+                            'Well done!',
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
                       ),
                 Spacer(flex: 1),
                 Text(
@@ -69,10 +97,10 @@ class _HomeViewState extends State<HomeView> {
                   style: TextStyle(fontSize: 22),
                 ),
                 Text(
-                  consecutiveDays.toString(),
+                  streakData.current.toString(),
                   style: TextStyle(fontSize: 56, fontWeight: FontWeight.bold),
                 ),
-                consecutiveDays > 1
+                streakData.current != 1
                     ? Text(
                         'days in a row',
                         style: TextStyle(fontSize: 18),
