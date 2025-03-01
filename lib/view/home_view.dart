@@ -19,23 +19,13 @@ class _HomeViewState extends State<HomeView> {
     context.read<StreakDataCubit>().getStreakData();
   }
 
-  bool checkDayCompleted() {
-    final DateTime lastUpdated =
-        context.read<StreakDataCubit>().state.lastUpdated;
-    final DateTime today =
-        DateTime.parse(context.read<StreakDataCubit>().getDates()['today']!);
-    print('lastUpdated: $lastUpdated, today: $today');
-    return lastUpdated.isAfter(today);
-  }
-
   @override
   Widget build(BuildContext context) {
-    // checkDayCompleted() returns true if the day is already completed
-    bool showButton = !checkDayCompleted();
-
     return Scaffold(
       body: BlocBuilder<StreakDataCubit, StreakData>(
         builder: (context, streakData) {
+          bool showButton = !streakData.dayCompleted;
+
           return Center(
             child: Column(
               children: [

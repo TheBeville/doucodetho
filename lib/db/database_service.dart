@@ -44,7 +44,7 @@ class DatabaseService {
         .update({'longest_streak': longestStreak + 1}).eq('id', userID);
   }
 
-  Future<void> updateDate(String userID, DateTime date) async {
+  Future<void> updateLastUpdated(String userID, DateTime date) async {
     await supabase
         .from('streak_data')
         .update({'last_updated': date.toIso8601String().split('T')[0]}).eq(

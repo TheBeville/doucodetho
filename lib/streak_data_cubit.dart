@@ -11,6 +11,7 @@ class StreakDataCubit extends Cubit<StreakData> {
           StreakData(
             current: 0,
             longest: 0,
+            dayCompleted: false,
             lastUpdated: DateTime.now(),
           ),
         );
@@ -30,6 +31,13 @@ class StreakDataCubit extends Cubit<StreakData> {
       userID,
     );
 
+    bool dayCompleted = false;
+    if (lastUpdated.year == DateTime.now().year &&
+        lastUpdated.month == DateTime.now().month &&
+        lastUpdated.day == DateTime.now().day) {
+      dayCompleted = true;
+    }
+
     final DateTime yesterday = DateTime.parse(getDates()['yesterday']!);
     int updatedCurrentStreak = currentStreak;
     if (lastUpdated.isBefore(yesterday)) {
@@ -39,6 +47,7 @@ class StreakDataCubit extends Cubit<StreakData> {
     emit(StreakData(
       current: updatedCurrentStreak,
       longest: longestStreak,
+      dayCompleted: dayCompleted,
       lastUpdated: lastUpdated,
     ));
   }
@@ -48,6 +57,7 @@ class StreakDataCubit extends Cubit<StreakData> {
 
     final int currentStreak = state.current;
     final int longestStreak = state.longest;
+    final bool dayCompleted = true;
     final DateTime lastUpdated = state.lastUpdated;
     final String userID = locator<AuthService>().getCurrentUser()!.id;
 
@@ -61,12 +71,14 @@ class StreakDataCubit extends Cubit<StreakData> {
       if (longestStreak == currentStreak) {
         longest = await incrementLongestStreak();
       }
-      await locator<DatabaseService>().updateDate(userID, DateTime.now());
+      await locator<DatabaseService>()
+          .updateLastUpdated(userID, DateTime.now());
     }
 
     emit(StreakData(
       current: current,
       longest: longest,
+      dayCompleted: dayCompleted,
       lastUpdated: DateTime.now(),
     ));
   }
@@ -111,6 +123,7 @@ class StreakDataCubit extends Cubit<StreakData> {
         StreakData(
           current: 0,
           longest: 0,
+          dayCompleted: false,
           lastUpdated: DateTime.now(),
         ),
       );
