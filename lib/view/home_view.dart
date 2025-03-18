@@ -1,5 +1,5 @@
 import 'package:doucodetho/model/streak_data_model.dart';
-import 'package:doucodetho/streak_data_cubit.dart';
+import 'package:doucodetho/cubit/streak_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,7 +11,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  String buttonText = 'Yes!';
+  String buttonText = 'Tap to complete';
 
   @override
   void initState() {
@@ -61,10 +61,30 @@ class _HomeViewState extends State<HomeView> {
                             ),
                           );
                         },
-                        child: Text(
-                          buttonText,
-                          style: TextStyle(fontSize: 18),
-                        ))
+                        style: ButtonStyle(
+                          backgroundColor:
+                              WidgetStateProperty.all(Colors.grey[300]),
+                          fixedSize: WidgetStateProperty.all(Size(200, 250)),
+                          shape: WidgetStateProperty.all(
+                            RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(6),
+                            ),
+                          ),
+                        ),
+                        child: Column(
+                          children: [
+                            SizedBox(height: 15),
+                            Text(
+                              '🔥',
+                              style: TextStyle(fontSize: 125),
+                            ),
+                            Text(
+                              buttonText,
+                              style: TextStyle(fontSize: 18),
+                            ),
+                          ],
+                        ),
+                      )
                     : Column(
                         children: [
                           Text(

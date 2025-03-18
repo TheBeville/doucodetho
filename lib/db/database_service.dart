@@ -30,6 +30,12 @@ class DatabaseService {
     return DateTime.parse(response['last_updated']);
   }
 
+  Future<void> resetCurrentStreak(String userID) async {
+    await supabase
+        .from('streak_data')
+        .update({'current_streak': 0}).eq('id', userID);
+  }
+
   Future<void> incrementCurrentStreak(String userID) async {
     final currentStreak = await getCurrentStreak(userID);
     await supabase

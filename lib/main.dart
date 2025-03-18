@@ -1,4 +1,4 @@
-import 'package:doucodetho/streak_data_cubit.dart';
+import 'package:doucodetho/cubit/streak_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:doucodetho/locator.dart';
 import 'package:doucodetho/view/home_view.dart';
