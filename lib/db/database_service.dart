@@ -30,12 +30,6 @@ class DatabaseService {
     return DateTime.parse(response['last_updated']);
   }
 
-  Future<void> resetCurrentStreak(String userID) async {
-    await supabase
-        .from('streak_data')
-        .update({'current_streak': 0}).eq('id', userID);
-  }
-
   Future<void> incrementCurrentStreak(String userID) async {
     final currentStreak = await getCurrentStreak(userID);
     await supabase
@@ -55,5 +49,20 @@ class DatabaseService {
         .from('streak_data')
         .update({'last_updated': date.toIso8601String().split('T')[0]}).eq(
             'id', userID);
+  }
+
+  Future<void> resetCurrentStreak(String userID) async {
+    await supabase
+        .from('streak_data')
+        .update({'current_streak': 0}).eq('id', userID);
+  }
+
+  Future<void> resetUserData(String userID) async {
+    await supabase.from('streak_data').update({
+      'current_streak': 0,
+      'longest_streak': 0,
+      'day_completed': false,
+      'last_updated': DateTime.now().toIso8601String().split('T')[0],
+    }).eq('id', userID);
   }
 }

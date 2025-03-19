@@ -35,7 +35,6 @@ class AuthService {
     return supabase.auth.currentSession?.user;
   }
 
-  // TODO: Implement signOut method in app
   Future<void> signOut() async {
     await supabase.auth.signOut();
   }

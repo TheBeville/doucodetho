@@ -1,3 +1,5 @@
+import 'package:doucodetho/auth/auth_service.dart';
+import 'package:doucodetho/locator.dart';
 import 'package:doucodetho/model/streak_data_model.dart';
 import 'package:doucodetho/cubit/streak_data_cubit.dart';
 import 'package:flutter/material.dart';
@@ -17,6 +19,10 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     context.read<StreakDataCubit>().getStreakData();
+  }
+
+  void signOut() {
+    locator<AuthService>().signOut();
   }
 
   @override
@@ -113,13 +119,21 @@ class _HomeViewState extends State<HomeView> {
                 streakData.current != 1
                     ? Text(
                         'days in a row',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 20),
                       )
                     : Text(
                         'day in a row',
-                        style: TextStyle(fontSize: 18),
+                        style: TextStyle(fontSize: 20),
                       ),
+                Text('(Longest Streak: ${streakData.longest})'),
                 Spacer(flex: 2),
+                TextButton(
+                    onPressed: signOut,
+                    child: Text(
+                      'Sign Out',
+                      style: TextStyle(fontSize: 18),
+                    )),
+                SizedBox(height: 25),
               ],
             ),
           );

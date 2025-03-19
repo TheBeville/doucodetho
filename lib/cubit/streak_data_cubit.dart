@@ -124,13 +124,18 @@ class StreakDataCubit extends Cubit<StreakData> {
     return dates;
   }
 
-  // TODO: refactor to also reset the Supabase database
-  void resetCubit() => emit(
-        StreakData(
-          current: 0,
-          longest: 0,
-          dayCompleted: false,
-          lastUpdated: DateTime.now(),
-        ),
-      );
+  void resetStreakData() {
+    locator<DatabaseService>().resetUserData(
+      locator<AuthService>().getCurrentUser()!.id,
+    );
+
+    emit(
+      StreakData(
+        current: 0,
+        longest: 0,
+        dayCompleted: false,
+        lastUpdated: DateTime.now(),
+      ),
+    );
+  }
 }

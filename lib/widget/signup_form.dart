@@ -74,35 +74,37 @@ class _SignupFormState extends State<SignupForm> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             TextFormField(
+              controller: emailController,
+              validator: _validator,
               decoration: InputDecoration(
                 hintText: 'Email',
               ),
-              controller: emailController,
-              validator: _validator,
             ),
             SizedBox(height: 10),
             TextFormField(
+              controller: usernameController,
+              validator: _validator,
               decoration: InputDecoration(
                 hintText: 'Display Name',
               ),
-              controller: usernameController,
-              validator: _validator,
             ),
             SizedBox(height: 10),
             TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              validator: _validator,
               decoration: InputDecoration(
                 hintText: 'Password',
               ),
-              controller: passwordController,
-              validator: _validator,
             ),
             SizedBox(height: 10),
             TextFormField(
+              controller: confirmPasswordController,
+              validator: _validator,
+              obscureText: true,
               decoration: InputDecoration(
                 hintText: 'Confirm Password',
               ),
-              controller: confirmPasswordController,
-              validator: _validator,
             ),
             SizedBox(height: 25),
             FilledButton(

@@ -64,11 +64,12 @@ class _LoginFormState extends State<LoginForm> {
             ),
             SizedBox(height: 10),
             TextFormField(
+              controller: passwordController,
+              obscureText: true,
+              validator: _validator,
               decoration: InputDecoration(
                 hintText: 'Password',
               ),
-              controller: passwordController,
-              validator: _validator,
             ),
             SizedBox(height: 25),
             FilledButton(
