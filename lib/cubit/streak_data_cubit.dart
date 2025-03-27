@@ -30,6 +30,18 @@ class StreakDataCubit extends Cubit<StreakData> {
         await locator<DatabaseService>().getLastUpdated(
       userID,
     );
+    int updatedCurrentStreak = currentStreak;
+
+    if (currentStreak == 0 && longestStreak == 0) {
+      emit(
+        StreakData(
+          current: updatedCurrentStreak,
+          longest: longestStreak,
+          dayCompleted: false,
+          lastUpdated: lastUpdated,
+        ),
+      );
+    }
 
     bool dayCompleted = false;
     if (lastUpdated.year == DateTime.now().year &&
@@ -39,9 +51,8 @@ class StreakDataCubit extends Cubit<StreakData> {
     }
 
     final DateTime yesterday = DateTime.parse(getDates()['yesterday']!);
-    int updatedCurrentStreak = currentStreak;
     if (lastUpdated.isBefore(yesterday)) {
-      await resetCurrentStreak();
+      await resetCurrentStreak(userID);
       updatedCurrentStreak = 0;
     }
 
@@ -68,9 +79,9 @@ class StreakDataCubit extends Cubit<StreakData> {
     if (lastUpdated.year < DateTime.now().year ||
         lastUpdated.month < DateTime.now().month ||
         lastUpdated.day < DateTime.now().day) {
-      current = await incrementCurrentStreak();
+      current = await incrementCurrentStreak(userID);
       if (longestStreak == currentStreak) {
-        longest = await incrementLongestStreak();
+        longest = await incrementLongestStreak(userID);
       }
       await locator<DatabaseService>()
           .updateLastUpdated(userID, DateTime.now());
@@ -84,21 +95,18 @@ class StreakDataCubit extends Cubit<StreakData> {
     ));
   }
 
-  Future<void> resetCurrentStreak() async {
-    final String userID = locator<AuthService>().getCurrentUser()!.id;
+  Future<void> resetCurrentStreak(String userID) async {
     await locator<DatabaseService>().resetCurrentStreak(userID);
   }
 
-  Future<int> incrementCurrentStreak() async {
-    final String userID = locator<AuthService>().getCurrentUser()!.id;
+  Future<int> incrementCurrentStreak(String userID) async {
     await locator<DatabaseService>().incrementCurrentStreak(userID);
     final int currentStreak =
         await locator<DatabaseService>().getCurrentStreak(userID);
     return currentStreak;
   }
 
-  Future<int> incrementLongestStreak() async {
-    final String userID = locator<AuthService>().getCurrentUser()!.id;
+  Future<int> incrementLongestStreak(String userID) async {
     await locator<DatabaseService>().incrementLongestStreak(userID);
     final int longestStreak =
         await locator<DatabaseService>().getLongestStreak(userID);
@@ -124,10 +132,8 @@ class StreakDataCubit extends Cubit<StreakData> {
     return dates;
   }
 
-  void resetStreakData() {
-    locator<DatabaseService>().resetUserData(
-      locator<AuthService>().getCurrentUser()!.id,
-    );
+  void resetStreakData(String userID) async {
+    await locator<DatabaseService>().resetUserData(userID);
 
     emit(
       StreakData(

@@ -22,7 +22,7 @@ class AuthService {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'username': username},
+        data: {'username': username, 'last_updated': DateTime.now()},
       );
       return response;
     } catch (e) {
