@@ -32,8 +32,10 @@ class _LoginViewState extends State<LoginView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
+      resizeToAvoidBottomInset: true,
+      body: SingleChildScrollView(
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           children: [
             SizedBox(
               height: 85,
@@ -58,11 +60,10 @@ class _LoginViewState extends State<LoginView> {
               selectedSegment: _selectedSegment,
               onSelectionChanged: _handleSegmentChanged,
             ),
-            SizedBox(height: 125),
+            SizedBox(height: 100),
             _selectedSegment == Segment.login
                 ? LoginForm()
                 : SignupForm(alreadyHaveAnAccount: _toggleToLogin),
-            Spacer(flex: 1),
           ],
         ),
       ),

@@ -69,7 +69,7 @@ class _HomeViewState extends State<HomeView> {
                         },
                         style: ButtonStyle(
                           backgroundColor:
-                              WidgetStateProperty.all(Colors.grey[300]),
+                              WidgetStateProperty.all(Colors.white10),
                           fixedSize: WidgetStateProperty.all(Size(200, 250)),
                           shape: WidgetStateProperty.all(
                             RoundedRectangleBorder(
@@ -81,12 +81,13 @@ class _HomeViewState extends State<HomeView> {
                           children: [
                             SizedBox(height: 15),
                             Text(
-                              '🔥',
+                              '❓',
                               style: TextStyle(fontSize: 125),
                             ),
                             Text(
                               buttonText,
-                              style: TextStyle(fontSize: 18),
+                              style:
+                                  TextStyle(fontSize: 18, color: Colors.black),
                             ),
                           ],
                         ),

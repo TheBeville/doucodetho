@@ -22,7 +22,11 @@ class AuthService {
       final response = await supabase.auth.signUp(
         email: email,
         password: password,
-        data: {'username': username, 'last_updated': DateTime.now()},
+        data: {
+          'username': username,
+          // TODO: fix Supabase trigger to avoid NULL value
+          'last_updated': DateTime.now().toIso8601String().split('T')[0],
+        },
       );
       return response;
     } catch (e) {
