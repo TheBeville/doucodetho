@@ -46,7 +46,8 @@ class StreakDataCubit extends Cubit<StreakData> {
     bool dayCompleted = false;
     if (lastUpdated.year == DateTime.now().year &&
         lastUpdated.month == DateTime.now().month &&
-        lastUpdated.day == DateTime.now().day) {
+        lastUpdated.day == DateTime.now().day &&
+        currentStreak != 0) {
       dayCompleted = true;
     }
 
@@ -78,7 +79,8 @@ class StreakDataCubit extends Cubit<StreakData> {
 
     if (lastUpdated.year < DateTime.now().year ||
         lastUpdated.month < DateTime.now().month ||
-        lastUpdated.day < DateTime.now().day) {
+        lastUpdated.day < DateTime.now().day ||
+        longestStreak == 0) {
       current = await incrementCurrentStreak(userID);
       if (longestStreak == currentStreak) {
         longest = await incrementLongestStreak(userID);

@@ -22,12 +22,17 @@ class DatabaseService {
   }
 
   Future<DateTime> getLastUpdated(String userID) async {
-    final response = await supabase
-        .from('streak_data')
-        .select('last_updated')
-        .eq('id', userID)
-        .single();
-    return DateTime.parse(response['last_updated']);
+    try {
+      final response = await supabase
+          .from('streak_data')
+          .select('last_updated')
+          .eq('id', userID)
+          .single();
+
+      return DateTime.parse(response['last_updated']);
+    } catch (e) {
+      return DateTime.now();
+    }
   }
 
   Future<void> incrementCurrentStreak(String userID) async {

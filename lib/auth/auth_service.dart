@@ -18,6 +18,7 @@ class AuthService {
     required String password,
     required String username,
   }) async {
+    DateTime yesterday = DateTime.now().subtract(Duration(days: 1));
     try {
       final response = await supabase.auth.signUp(
         email: email,
@@ -25,7 +26,7 @@ class AuthService {
         data: {
           'username': username,
           // TODO: fix Supabase trigger to avoid NULL value
-          'last_updated': DateTime.now().toIso8601String().split('T')[0],
+          'last_updated': yesterday.toIso8601String().split('T')[0],
         },
       );
       return response;
