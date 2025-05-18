@@ -42,11 +42,25 @@ class DatabaseService {
         .update({'current_streak': currentStreak + 1}).eq('id', userID);
   }
 
+  Future<void> decrementCurrentStreak(String userID) async {
+    final currentStreak = await getCurrentStreak(userID);
+    await supabase
+        .from('streak_data')
+        .update({'current_streak': currentStreak - 1}).eq('id', userID);
+  }
+
   Future<void> incrementLongestStreak(String userID) async {
     final longestStreak = await getLongestStreak(userID);
     await supabase
         .from('streak_data')
         .update({'longest_streak': longestStreak + 1}).eq('id', userID);
+  }
+
+  Future<void> decrementLongestStreak(String userID) async {
+    final longestStreak = await getLongestStreak(userID);
+    await supabase
+        .from('streak_data')
+        .update({'longest_streak': longestStreak - 1}).eq('id', userID);
   }
 
   Future<void> updateLastUpdated(String userID, DateTime date) async {

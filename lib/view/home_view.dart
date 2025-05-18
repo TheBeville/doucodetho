@@ -108,7 +108,27 @@ class _HomeViewState extends State<HomeView> {
                           ),
                         ],
                       ),
-                Spacer(flex: 1),
+                showButton
+                    ? SizedBox(height: 50)
+                    : Column(
+                        children: [
+                          TextButton(
+                            onPressed: () {
+                              context
+                                  .read<StreakDataCubit>()
+                                  .undoIncrementStreaks();
+                              setState(() {
+                                showButton = false;
+                                buttonText = 'Tap to complete';
+                              });
+                            },
+                            child: Text('Undo ↩️',
+                                style: TextStyle(
+                                    fontSize: 16, color: Colors.black)),
+                          ),
+                          SizedBox(height: 5),
+                        ],
+                      ),
                 Text(
                   'Current Streak',
                   style: TextStyle(fontSize: 22),

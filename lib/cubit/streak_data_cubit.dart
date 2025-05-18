@@ -101,6 +101,26 @@ class StreakDataCubit extends Cubit<StreakData> {
     await locator<DatabaseService>().resetCurrentStreak(userID);
   }
 
+  Future<void> undoIncrementStreaks() async {
+    if (locator<AuthService>().getCurrentUser() == null) return;
+    final String userID = locator<AuthService>().getCurrentUser()!.id;
+    final DateTime newLastUpdated = DateTime.now().subtract(Duration(days: 1));
+    final bool decrementLongest = state.longest == state.current;
+
+    await locator<DatabaseService>().updateLastUpdated(userID, newLastUpdated);
+    if (decrementLongest) {
+      await locator<DatabaseService>().decrementLongestStreak(userID);
+    }
+    await locator<DatabaseService>().decrementCurrentStreak(userID);
+
+    emit(StreakData(
+      current: state.current - 1,
+      longest: decrementLongest ? state.longest - 1 : state.longest,
+      dayCompleted: false,
+      lastUpdated: newLastUpdated,
+    ));
+  }
+
   Future<int> incrementCurrentStreak(String userID) async {
     await locator<DatabaseService>().incrementCurrentStreak(userID);
     final int currentStreak =
