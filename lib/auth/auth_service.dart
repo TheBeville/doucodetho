@@ -40,6 +40,15 @@ class AuthService {
     return supabase.auth.currentSession?.user;
   }
 
+  Future<String> getCurrentUserName(String userID) async {
+    final response = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('id', userID)
+        .single();
+    return response['username'];
+  }
+
   Future<void> signOut() async {
     await supabase.auth.signOut();
   }

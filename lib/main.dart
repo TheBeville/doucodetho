@@ -1,3 +1,4 @@
+import 'package:doucodetho/cubit/user_info_cubit.dart';
 import 'package:doucodetho/cubit/streak_data_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:doucodetho/locator.dart';
@@ -27,8 +28,15 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: BlocProvider(
-        create: (context) => StreakDataCubit(),
+      home: MultiBlocProvider(
+        providers: [
+          BlocProvider(
+            create: (context) => StreakDataCubit(),
+          ),
+          BlocProvider(
+            create: (context) => UserInfoCubit(),
+          ),
+        ],
         child: StreamBuilder(
           stream: supabase.auth.onAuthStateChange,
           builder: (context, snapshot) {

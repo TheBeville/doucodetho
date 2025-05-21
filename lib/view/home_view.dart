@@ -1,7 +1,8 @@
-import 'package:doucodetho/auth/auth_service.dart';
-import 'package:doucodetho/locator.dart';
+import 'package:doucodetho/cubit/user_info_cubit.dart';
+import 'package:doucodetho/model/user_info_model.dart';
 import 'package:doucodetho/model/streak_data_model.dart';
 import 'package:doucodetho/cubit/streak_data_cubit.dart';
+import 'package:doucodetho/widget/home_view_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -19,15 +20,14 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     context.read<StreakDataCubit>().getStreakData();
-  }
-
-  void signOut() {
-    locator<AuthService>().signOut();
+    context.read<UserInfoCubit>().getUserName();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(),
+      endDrawer: HomeViewDrawer(),
       body: BlocBuilder<StreakDataCubit, StreakData>(
         builder: (context, streakData) {
           bool showButton = !streakData.dayCompleted;
@@ -35,13 +35,16 @@ class _HomeViewState extends State<HomeView> {
           return Center(
             child: Column(
               children: [
-                SizedBox(height: 100),
-                Text(
-                  'Hello!',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                  ),
+                BlocBuilder<UserInfoCubit, UserInfo>(
+                  builder: (context, authInfo) {
+                    return Text(
+                      'Hello, ${authInfo.username}!',
+                      style: TextStyle(
+                        fontSize: 36,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    );
+                  },
                 ),
                 Text(
                   'Do u code tho?',
@@ -148,12 +151,6 @@ class _HomeViewState extends State<HomeView> {
                       ),
                 Text('(Longest Streak: ${streakData.longest})'),
                 Spacer(flex: 2),
-                TextButton(
-                    onPressed: signOut,
-                    child: Text(
-                      'Sign Out',
-                      style: TextStyle(fontSize: 18),
-                    )),
                 SizedBox(height: 25),
               ],
             ),
