@@ -25,7 +25,6 @@ class AuthService {
         password: password,
         data: {
           'username': username,
-          // TODO: fix Supabase trigger to avoid NULL value
           'last_updated': yesterday.toIso8601String().split('T')[0],
         },
       );

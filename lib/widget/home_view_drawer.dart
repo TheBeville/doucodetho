@@ -1,10 +1,7 @@
-import 'package:doucodetho/auth/auth_service.dart';
 import 'package:doucodetho/cubit/user_info_cubit.dart';
 import 'package:doucodetho/model/user_info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../locator.dart';
 
 class HomeViewDrawer extends StatefulWidget {
   const HomeViewDrawer({super.key});
@@ -14,15 +11,6 @@ class HomeViewDrawer extends StatefulWidget {
 }
 
 class _HomeViewDrawerState extends State<HomeViewDrawer> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  void signOut() {
-    locator<AuthService>().signOut();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -64,7 +52,7 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
               ),
             ),
             onPressed: () {
-              signOut();
+              context.read<UserInfoCubit>().signOut();
               Navigator.pop(context);
             },
           ),

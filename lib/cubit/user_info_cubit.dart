@@ -32,4 +32,15 @@ class UserInfoCubit extends Cubit<UserInfo> {
       ),
     );
   }
+
+  Future<void> signOut() async {
+    await locator<AuthService>().signOut();
+    emit(
+      UserInfo(
+        userID: '',
+        username: '',
+        email: '',
+      ),
+    );
+  }
 }
