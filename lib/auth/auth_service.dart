@@ -35,6 +35,10 @@ class AuthService {
     }
   }
 
+  void requestPasswordReset(String email) async {
+    await supabase.auth.resetPasswordForEmail(email);
+  }
+
   User? getCurrentUser() {
     return supabase.auth.currentSession?.user;
   }

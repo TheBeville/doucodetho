@@ -1,4 +1,6 @@
+import 'package:doucodetho/auth/auth_service.dart';
 import 'package:doucodetho/cubit/user_info_cubit.dart';
+import 'package:doucodetho/locator.dart';
 import 'package:doucodetho/model/user_info_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -18,7 +20,7 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           SizedBox(
-            height: 175,
+            height: 180,
             child: DrawerHeader(
               child: BlocBuilder<UserInfoCubit, UserInfo>(
                 builder: (context, authInfo) {
@@ -43,12 +45,37 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
               ),
             ),
           ),
+          SizedBox(height: 10),
           TextButton(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
+            child: Text(
+              'Reset Password',
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.blue,
+              ),
+            ),
+            onPressed: () {
+              locator<AuthService>().requestPasswordReset(
+                  context.read<UserInfoCubit>().state.email!);
+              Navigator.pop(context);
+            },
+          ),
+          TextButton(
+            style: TextButton.styleFrom(
+              padding: EdgeInsets.zero,
+              minimumSize: Size.zero,
+              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+            ),
             child: Text(
               'Sign Out',
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.blue,
+                color: Colors.red,
               ),
             ),
             onPressed: () {
