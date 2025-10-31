@@ -21,6 +21,11 @@ class _LoginFormState extends State<LoginForm> {
     return null;
   }
 
+  SnackBar snackBar = SnackBar(
+    content: Text('Password reset email sent!'),
+    duration: Duration(seconds: 2),
+  );
+
   void _onLoginButtonPressed() {
     if (_formKey.currentState!.validate()) {
       try {
@@ -92,7 +97,29 @@ class _LoginFormState extends State<LoginForm> {
               ),
             ),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                if (emailController.text != '') {
+                  locator<AuthService>().requestPasswordReset(
+                    emailController.text,
+                  );
+                  ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                  return;
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text(
+                        'Please enter your email address.',
+                        style: TextStyle(
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                        ),
+                      ),
+                      duration: Duration(seconds: 2),
+                    ),
+                  );
+                }
+              },
               child: Text(
                 'Forgotten your password?',
                 style: TextStyle(fontSize: 18, color: Colors.green),
