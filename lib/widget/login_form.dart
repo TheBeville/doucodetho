@@ -110,11 +110,12 @@ class _LoginFormState extends State<LoginForm> {
                       content: Text(
                         'Please enter your email address.',
                         style: TextStyle(
-                          color: Colors.red,
+                          color: Colors.white,
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
                         ),
                       ),
+                      backgroundColor: Colors.red,
                       duration: Duration(seconds: 2),
                     ),
                   );

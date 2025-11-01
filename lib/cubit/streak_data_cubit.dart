@@ -16,7 +16,7 @@ class StreakDataCubit extends Cubit<StreakData> {
           ),
         );
 
-  void getStreakData() async {
+  Future getStreakData() async {
     if (locator<AuthService>().getCurrentUser() == null) return;
 
     final String userID = locator<AuthService>().getCurrentUser()!.id;
@@ -65,7 +65,7 @@ class StreakDataCubit extends Cubit<StreakData> {
     ));
   }
 
-  void incrementStreaks() async {
+  Future<void> incrementStreaks() async {
     if (locator<AuthService>().getCurrentUser() == null) return;
 
     final int currentStreak = state.current;
@@ -154,7 +154,7 @@ class StreakDataCubit extends Cubit<StreakData> {
     return dates;
   }
 
-  void resetStreakData(String userID) async {
+  Future<void> resetStreakData(String userID) async {
     await locator<DatabaseService>().resetUserData(userID);
 
     emit(
