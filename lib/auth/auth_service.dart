@@ -30,8 +30,7 @@ class AuthService {
       );
       return response;
     } catch (e) {
-      print('Error signing up: $e');
-      return null;
+      throw Exception('Error signing up: $e');
     }
   }
 
