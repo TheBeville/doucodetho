@@ -34,8 +34,19 @@ class AuthService {
     }
   }
 
-  void requestPasswordReset(String email) async {
-    await supabase.auth.resetPasswordForEmail(email);
+  Future<void> requestPasswordReset(String email) async {
+    await supabase.auth.resetPasswordForEmail(
+      email,
+      redirectTo: 'io.supabase.doucodetho://reset-password',
+    );
+  }
+
+  Future<void> updatePassword(String newPassword) async {
+    await supabase.auth.updateUser(
+      UserAttributes(
+        password: newPassword,
+      ),
+    );
   }
 
   User? getCurrentUser() {
