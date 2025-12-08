@@ -31,8 +31,8 @@
                 <category android:name="android.intent.category.BROWSABLE" />
                 <!-- Accepts URIs that begin with YOUR_SCHEME://YOUR_HOST -->
                 <data
-                android:scheme="io.supabase.flutterquickstart"
-                android:host="login-callback" />
+                android:scheme="io.supabase.doucodetho"
+                android:host="reset-password" />
             </intent-filter>
             <!-- End of Supabase deep linking stuff -->
         </activity>
