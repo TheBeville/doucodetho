@@ -14,7 +14,7 @@ void main() async {
   await dotenv.load(fileName: ".env");
   await Supabase.initialize(
     url: dotenv.env['SUPABASE_URL'] ?? '',
-    anonKey: dotenv.env['API_KEY'] ?? '',
+    publishableKey: dotenv.env['API_KEY'] ?? '',
   );
   setupLocator();
   runApp(MainApp());
