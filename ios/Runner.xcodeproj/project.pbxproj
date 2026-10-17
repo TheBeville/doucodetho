@@ -16,6 +16,11 @@
 		97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FD1CF9000F007C117D /* Assets.xcassets */; };
 		97C147011CF9000F007C117D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 97C146FF1CF9000F007C117D /* LaunchScreen.storyboard */; };
 		9C1CCB38DA4D49E0BD062566 /* Pods_Runner.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7CD61772B09A08D0482AEDFB /* Pods_Runner.framework */; };
+		AFAB458BCE00ACB018AFED1D /* HomeScreenWidgetHomeWidget.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C9CC1C3AE4DF92057E8FC7E8 /* HomeScreenWidgetHomeWidget.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		180F8DEC7123C23B73406F26 /* WidgetKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 75A9DD4FD4DB6694D1E10BA5 /* WidgetKit.framework */; };
+		9BA9E4AFD2A5A37CA6C9F4A9 /* SwiftUI.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 114FF710A30DDDC7C41580C6 /* SwiftUI.framework */; };
+		41EF04F788A7E76EE3B21381 /* Widget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 28863EC262A7196F281DD048 /* Widget.swift */; };
+		F46E84F7D5A031AEABEE3D29 /* WidgetBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 86C0B56A89C6F3CF52889F40 /* WidgetBundle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -25,6 +30,13 @@
 			proxyType = 1;
 			remoteGlobalIDString = 97C146ED1CF9000F007C117D;
 			remoteInfo = Runner;
+		};
+		A319F17813EF720F0D7B64DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 97C146E61CF9000F007C117D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 089E600F384638D28B3FD7ED;
+			remoteInfo = HomeScreenWidgetHomeWidget;
 		};
 /* End PBXContainerItemProxy section */
 
@@ -37,6 +49,17 @@
 			files = (
 			);
 			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		858D66B2AD50422F2928E718 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				AFAB458BCE00ACB018AFED1D /* HomeScreenWidgetHomeWidget.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
@@ -65,6 +88,14 @@
 		97C147021CF9000F007C117D /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CA939A4CCD5E71BB73CF1E35 /* Pods-RunnerTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.debug.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EA3C8F6EB387129998AC5BD8 /* Pods-RunnerTests.profile.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RunnerTests.profile.xcconfig"; path = "Target Support Files/Pods-RunnerTests/Pods-RunnerTests.profile.xcconfig"; sourceTree = "<group>"; };
+		68EC8D0B1D2F26069F27AD05 /* HomeWidget.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = HomeWidget.xcconfig; path = Flutter/HomeWidget.xcconfig; sourceTree = "<group>"; };
+		C9CC1C3AE4DF92057E8FC7E8 /* HomeScreenWidgetHomeWidget.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = HomeScreenWidgetHomeWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		75A9DD4FD4DB6694D1E10BA5 /* WidgetKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WidgetKit.framework; path = System/Library/Frameworks/WidgetKit.framework; sourceTree = SDKROOT; };
+		114FF710A30DDDC7C41580C6 /* SwiftUI.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftUI.framework; path = System/Library/Frameworks/SwiftUI.framework; sourceTree = SDKROOT; };
+		57BB17C9FD7F1B84CD5C664B /* HomeScreenWidgetHomeWidget.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = HomeScreenWidgetHomeWidget.entitlements; sourceTree = "<group>"; };
+		28863EC262A7196F281DD048 /* Widget.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Widget.swift; sourceTree = "<group>"; };
+		86C0B56A89C6F3CF52889F40 /* WidgetBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WidgetBundle.swift; sourceTree = "<group>"; };
+		F3EC01CB8B5865F6C3D5E435 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,6 +112,15 @@
 			buildActionMask = 2147483647;
 			files = (
 				9C1CCB38DA4D49E0BD062566 /* Pods_Runner.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		DCC296264655C457556D7C40 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9BA9E4AFD2A5A37CA6C9F4A9 /* SwiftUI.framework in Frameworks */,
+				180F8DEC7123C23B73406F26 /* WidgetKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -125,6 +165,7 @@
 				9740EEB21CF90195004384FC /* Debug.xcconfig */,
 				7AFA3C8E1D35360C0083082E /* Release.xcconfig */,
 				9740EEB31CF90195004384FC /* Generated.xcconfig */,
+				68EC8D0B1D2F26069F27AD05 /* HomeWidget.xcconfig */,
 			);
 			name = Flutter;
 			sourceTree = "<group>";
@@ -138,6 +179,8 @@
 				331C8082294A63A400263BE5 /* RunnerTests */,
 				1E535C174B7A89CADEB667F5 /* Pods */,
 				516CB9ECD04FDC549563E3B8 /* Frameworks */,
+				57BB17C9FD7F1B84CD5C664B /* HomeScreenWidgetHomeWidget.entitlements */,
+				D63418B1371B8FD6B118F597 /* HomeScreenWidgetHomeWidget */,
 			);
 			sourceTree = "<group>";
 		};
@@ -146,6 +189,7 @@
 			children = (
 				97C146EE1CF9000F007C117D /* Runner.app */,
 				331C8081294A63A400263BE5 /* RunnerTests.xctest */,
+				C9CC1C3AE4DF92057E8FC7E8 /* HomeScreenWidgetHomeWidget.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -163,6 +207,16 @@
 				74858FAD1ED2DC5600515810 /* Runner-Bridging-Header.h */,
 			);
 			path = Runner;
+			sourceTree = "<group>";
+		};
+		D63418B1371B8FD6B118F597 /* HomeScreenWidgetHomeWidget */ = {
+			isa = PBXGroup;
+			children = (
+				28863EC262A7196F281DD048 /* Widget.swift */,
+				86C0B56A89C6F3CF52889F40 /* WidgetBundle.swift */,
+				F3EC01CB8B5865F6C3D5E435 /* Info.plist */,
+			);
+			path = HomeScreenWidgetHomeWidget;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -197,17 +251,36 @@
 				97C146EB1CF9000F007C117D /* Frameworks */,
 				97C146EC1CF9000F007C117D /* Resources */,
 				9705A1C41CF9048500538489 /* Embed Frameworks */,
-				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
+				858D66B2AD50422F2928E718 /* Embed Foundation Extensions */,
 				F5C0C72C5E903C06C73E11C9 /* [CP] Embed Pods Frameworks */,
+				3B06AD1E1E4923F5004D2608 /* Thin Binary */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				C41A490B899AFC0832D6BD85 /* PBXTargetDependency */,
 			);
 			name = Runner;
 			productName = Runner;
 			productReference = 97C146EE1CF9000F007C117D /* Runner.app */;
 			productType = "com.apple.product-type.application";
+		};
+		089E600F384638D28B3FD7ED /* HomeScreenWidgetHomeWidget */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 673201A29102BF014F099A8C /* Build configuration list for PBXNativeTarget "HomeScreenWidgetHomeWidget" */;
+			buildPhases = (
+				BFE95A81C9AE6D121205AA57 /* Sources */,
+				DCC296264655C457556D7C40 /* Frameworks */,
+				BC90CFF8B723330BD25D937A /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = HomeScreenWidgetHomeWidget;
+			productName = HomeScreenWidgetHomeWidget;
+			productReference = C9CC1C3AE4DF92057E8FC7E8 /* HomeScreenWidgetHomeWidget.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 /* End PBXNativeTarget section */
 
@@ -244,6 +317,7 @@
 			targets = (
 				97C146ED1CF9000F007C117D /* Runner */,
 				331C8080294A63A400263BE5 /* RunnerTests */,
+				089E600F384638D28B3FD7ED /* HomeScreenWidgetHomeWidget */,
 			);
 		};
 /* End PBXProject section */
@@ -264,6 +338,13 @@
 				3B3967161E833CAA004F5970 /* AppFrameworkInfo.plist in Resources */,
 				97C146FE1CF9000F007C117D /* Assets.xcassets in Resources */,
 				97C146FC1CF9000F007C117D /* Main.storyboard in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		BC90CFF8B723330BD25D937A /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -382,6 +463,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		BFE95A81C9AE6D121205AA57 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				41EF04F788A7E76EE3B21381 /* Widget.swift in Sources */,
+				F46E84F7D5A031AEABEE3D29 /* WidgetBundle.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -389,6 +479,11 @@
 			isa = PBXTargetDependency;
 			target = 97C146ED1CF9000F007C117D /* Runner */;
 			targetProxy = 331C8085294A63A400263BE5 /* PBXContainerItemProxy */;
+		};
+		C41A490B899AFC0832D6BD85 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 089E600F384638D28B3FD7ED /* HomeScreenWidgetHomeWidget */;
+			targetProxy = A319F17813EF720F0D7B64DA /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -470,10 +565,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = YNX43D27PF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -653,10 +750,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = YNX43D27PF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -676,10 +775,12 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = Runner/Runner.entitlements;
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = YNX43D27PF;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Runner/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -691,6 +792,87 @@
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
+		};
+		045CDBCD403C7C16561DB63F /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68EC8D0B1D2F26069F27AD05 /* HomeWidget.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = HomeScreenWidgetHomeWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = YNX43D27PF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = HomeScreenWidgetHomeWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HomeScreenWidgetHomeWidget;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.doucodetho.HomeScreenWidgetHomeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		966F553BD35DE064BFE35C65 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68EC8D0B1D2F26069F27AD05 /* HomeWidget.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = HomeScreenWidgetHomeWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = YNX43D27PF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = HomeScreenWidgetHomeWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HomeScreenWidgetHomeWidget;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.doucodetho.HomeScreenWidgetHomeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		C5B34A2759FF5EB454436BED /* Profile */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 68EC8D0B1D2F26069F27AD05 /* HomeWidget.xcconfig */;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_ENTITLEMENTS = HomeScreenWidgetHomeWidget.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
+				DEVELOPMENT_TEAM = YNX43D27PF;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 14.0;
+				INFOPLIST_FILE = HomeScreenWidgetHomeWidget/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = HomeScreenWidgetHomeWidget;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				MARKETING_VERSION = "$(FLUTTER_BUILD_NAME)";
+				PRODUCT_BUNDLE_IDENTIFIER = com.example.doucodetho.HomeScreenWidgetHomeWidget;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Profile;
 		};
 /* End XCBuildConfiguration section */
 
@@ -721,6 +903,16 @@
 				97C147061CF9000F007C117D /* Debug */,
 				97C147071CF9000F007C117D /* Release */,
 				249021D4217E4FDB00AE95B9 /* Profile */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		673201A29102BF014F099A8C /* Build configuration list for PBXNativeTarget "HomeScreenWidgetHomeWidget" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				045CDBCD403C7C16561DB63F /* Debug */,
+				966F553BD35DE064BFE35C65 /* Release */,
+				C5B34A2759FF5EB454436BED /* Profile */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
