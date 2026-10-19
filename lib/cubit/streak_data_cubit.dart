@@ -2,6 +2,7 @@ import 'package:doucodetho/auth/auth_service.dart';
 import 'package:doucodetho/db/database_service.dart';
 import 'package:doucodetho/model/streak_data_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:doucodetho/home_widget/home_widget_service.dart';
 
 import '../locator.dart';
 
@@ -63,6 +64,11 @@ class StreakDataCubit extends Cubit<StreakData> {
       dayCompleted: dayCompleted,
       lastUpdated: lastUpdated,
     ));
+
+    await locator<HomeWidgetService>().updateWidgetData(
+      currentStreak: state.current,
+      dayCompleted: state.dayCompleted,
+    );
   }
 
   Future<void> incrementStreaks() async {
@@ -95,6 +101,11 @@ class StreakDataCubit extends Cubit<StreakData> {
       dayCompleted: dayCompleted,
       lastUpdated: DateTime.now(),
     ));
+
+    await locator<HomeWidgetService>().updateWidgetData(
+      currentStreak: state.current,
+      dayCompleted: state.dayCompleted,
+    );
   }
 
   Future<void> resetCurrentStreak(String userID) async {
@@ -119,6 +130,11 @@ class StreakDataCubit extends Cubit<StreakData> {
       dayCompleted: false,
       lastUpdated: newLastUpdated,
     ));
+
+    await locator<HomeWidgetService>().updateWidgetData(
+      currentStreak: state.current,
+      dayCompleted: state.dayCompleted,
+    );
   }
 
   Future<int> incrementCurrentStreak(String userID) async {

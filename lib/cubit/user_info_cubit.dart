@@ -1,4 +1,5 @@
 import 'package:doucodetho/auth/auth_service.dart';
+import 'package:doucodetho/home_widget/home_widget_service.dart';
 import 'package:doucodetho/model/user_info_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -31,6 +32,8 @@ class UserInfoCubit extends Cubit<UserInfo> {
         email: user?.email! ?? '',
       ),
     );
+
+    await locator<HomeWidgetService>().updateWidgetData(name: username);
   }
 
   Future<void> signOut() async {
@@ -42,5 +45,7 @@ class UserInfoCubit extends Cubit<UserInfo> {
         email: '',
       ),
     );
+
+    await locator<HomeWidgetService>().clearWidgetData();
   }
 }

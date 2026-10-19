@@ -43,9 +43,10 @@ class _HomeViewState extends State<HomeView> {
               physics: AlwaysScrollableScrollPhysics(),
               children: [
                 SizedBox(
-                  height: MediaQuery.of(context).size.height -
-                      MediaQuery.of(context).padding.top -
-                      kToolbarHeight,
+                  height: (MediaQuery.of(context).size.height -
+                          MediaQuery.of(context).padding.top -
+                          kToolbarHeight)
+                      .clamp(0.0, double.infinity),
                   child: Center(
                     child: Column(
                       children: [

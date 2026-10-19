@@ -25,6 +25,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.GlanceTheme
 import androidx.core.os.ConfigurationCompat
 import java.util.Locale
+import java.text.NumberFormat
 import androidx.glance.color.ColorProvider
 import androidx.compose.ui.unit.dp
 import androidx.glance.layout.padding
@@ -47,7 +48,7 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
     val hwPreviewData =
         HomeScreenWidgetData.fromPreferences(HomeWidgetPlugin.getData(context))
     return listOf(
-      "94e0093a",
+      "29801b60",
       hwLocales.joinToString(","),
       hwPreviewData.toString(),
     ).joinToString("|")
@@ -64,6 +65,11 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
                         Text(text = "Hello, ", style = TextStyle(color = GlanceTheme.colors.onSurface))
                         Text(text = widgetData.name ?: "", style = TextStyle(color = GlanceTheme.colors.onSurface))
                     }
+                    Text(text = (widgetData.dayCompleted?.toString() ?: "false"), style = TextStyle(color = GlanceTheme.colors.onSurface))
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Text(text = "Current streak: ", style = TextStyle(color = GlanceTheme.colors.onSurface))
+                        Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = GlanceTheme.colors.onSurface))
+                    }
                 }
             }
     }
@@ -73,6 +79,8 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
 
 data class HomeScreenWidgetData(
     val name: String? = null,
+    val dayCompleted: Boolean? = null,
+    val currentStreak: Long? = null,
 ) {
     companion object {
         private const val PREFERENCES_PREFIX = "home_widget.HomeScreenWidget"
@@ -80,6 +88,8 @@ data class HomeScreenWidgetData(
         fun fromPreferences(prefs: android.content.SharedPreferences): HomeScreenWidgetData {
             return HomeScreenWidgetData(
                 name = prefs.getString("${PREFERENCES_PREFIX}.name", "User"),
+                dayCompleted = if (prefs.contains("${PREFERENCES_PREFIX}.dayCompleted")) prefs.getBoolean("${PREFERENCES_PREFIX}.dayCompleted", false) else false,
+                currentStreak = if (prefs.contains("${PREFERENCES_PREFIX}.currentStreak")) (try { prefs.getInt("${PREFERENCES_PREFIX}.currentStreak", 0).toLong() } catch (_: ClassCastException) { prefs.getLong("${PREFERENCES_PREFIX}.currentStreak", 0L) }) else 0L,
             )
         }
     }
@@ -100,4 +110,22 @@ private fun hwCurrentLocales(context: Context): List<String> {
         if (fallback.isNotEmpty() && fallback != "und") tags.add(fallback)
     }
     return tags
+}
+
+private fun hwFormatLocale(context: Context): Locale =
+    ConfigurationCompat.getLocales(context.resources.configuration)[0]
+        ?: Locale.getDefault()
+
+private fun hwFormatDecimal(
+    value: Number,
+    minFraction: Int?,
+    maxFraction: Int?,
+    grouping: Boolean,
+    locale: Locale,
+): String {
+    val formatter = NumberFormat.getNumberInstance(locale)
+    formatter.isGroupingUsed = grouping
+    minFraction?.let { formatter.minimumFractionDigits = it }
+    maxFraction?.let { formatter.maximumFractionDigits = it }
+    return formatter.format(value)
 }
