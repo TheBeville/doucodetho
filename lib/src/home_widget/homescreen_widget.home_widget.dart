@@ -13,23 +13,33 @@ class HomeScreenWidgetHomeWidget {
 
   static Future<void> saveData({
     String? name,
+    bool? dayCompleted,
+    int? currentStreak,
   }) {
     return Future.wait([
       if (name != null) HomeWidget.saveWidgetData<String>('${_$paramPrefix}.name', name, appGroupId: _$appGroupId),
+      if (dayCompleted != null) HomeWidget.saveWidgetData<bool>('${_$paramPrefix}.dayCompleted', dayCompleted, appGroupId: _$appGroupId),
+      if (currentStreak != null) HomeWidget.saveWidgetData<int>('${_$paramPrefix}.currentStreak', currentStreak, appGroupId: _$appGroupId),
     ]);
   }
 
   static Future<void> deleteData({
     bool name = false,
+    bool dayCompleted = false,
+    bool currentStreak = false,
   }) {
     return Future.wait([
       if (name) HomeWidget.saveWidgetData('${_$paramPrefix}.name', null, appGroupId: _$appGroupId),
+      if (dayCompleted) HomeWidget.saveWidgetData('${_$paramPrefix}.dayCompleted', null, appGroupId: _$appGroupId),
+      if (currentStreak) HomeWidget.saveWidgetData('${_$paramPrefix}.currentStreak', null, appGroupId: _$appGroupId),
     ]);
   }
 
-  static Future<({String? name})> getData() async {
+  static Future<({String? name, bool? dayCompleted, int? currentStreak})> getData() async {
     return (
       name: await HomeWidget.getWidgetData<String>('${_$paramPrefix}.name', defaultValue: 'User', appGroupId: _$appGroupId),
+      dayCompleted: await HomeWidget.getWidgetData<bool>('${_$paramPrefix}.dayCompleted', defaultValue: false, appGroupId: _$appGroupId),
+      currentStreak: await HomeWidget.getWidgetData<int>('${_$paramPrefix}.currentStreak', defaultValue: 0, appGroupId: _$appGroupId),
     );
   }
 
