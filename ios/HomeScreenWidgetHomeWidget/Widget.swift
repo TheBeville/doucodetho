@@ -46,13 +46,21 @@ struct HomeScreenWidgetHomeWidgetEntryView: View {
         VStack(alignment: .center, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
                 Text("Hello, ")
+                    .font(.system(size: 20.0, weight: .bold)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
                 Text(entry.data.name ?? "")
+                    .font(.system(size: 20.0, weight: .bold)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
             }
-            Text(entry.data.dayCompleted != nil ? "\(entry.data.dayCompleted!)" : "false")
-            HStack(alignment: .center, spacing: 0) {
-                Text("Current streak: ")
-                Text(hwFormatDecimal(NSNumber(value: entry.data.currentStreak ?? 0), minFraction: nil, maxFraction: nil, grouping: true))
+            if entry.data.dayCompleted == true {
+                Text("🔥")
+                    .font(.system(size: 48.0, weight: .bold))
+            } else {
+                Text("❓")
+                    .font(.system(size: 48.0, weight: .bold))
             }
+            Text("Current streak")
+                .font(.system(size: 16.0)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
+            Text(hwFormatDecimal(NSNumber(value: entry.data.currentStreak ?? 0), minFraction: nil, maxFraction: nil, grouping: true))
+                .font(.system(size: 28.0, weight: .bold)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
         }
     .applyContainerBackground()
   }

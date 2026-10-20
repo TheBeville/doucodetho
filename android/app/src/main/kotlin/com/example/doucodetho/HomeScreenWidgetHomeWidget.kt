@@ -22,11 +22,13 @@ import androidx.glance.layout.Column
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Row
 import androidx.glance.text.TextStyle
+import androidx.glance.color.ColorProvider
+import androidx.compose.ui.unit.sp
+import androidx.glance.text.FontWeight
 import androidx.glance.GlanceTheme
 import androidx.core.os.ConfigurationCompat
 import java.util.Locale
 import java.text.NumberFormat
-import androidx.glance.color.ColorProvider
 import androidx.compose.ui.unit.dp
 import androidx.glance.layout.padding
 import androidx.glance.action.clickable
@@ -48,7 +50,7 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
     val hwPreviewData =
         HomeScreenWidgetData.fromPreferences(HomeWidgetPlugin.getData(context))
     return listOf(
-      "29801b60",
+      "baf86e78",
       hwLocales.joinToString(","),
       hwPreviewData.toString(),
     ).joinToString("|")
@@ -59,17 +61,19 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
     val prefs = currentState.preferences
     val widgetData = HomeScreenWidgetData.fromPreferences(prefs)
     GlanceTheme {
-            Box(modifier = GlanceModifier.background(GlanceTheme.colors.widgetBackground).padding(16.dp).fillMaxSize().clickable(onClick = actionStartActivity<MainActivity>()), contentAlignment = Alignment.Center) {
+            Box(modifier = GlanceModifier.background(ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))).padding(16.dp).fillMaxSize().clickable(onClick = actionStartActivity<MainActivity>()), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Hello, ", style = TextStyle(color = GlanceTheme.colors.onSurface))
-                        Text(text = widgetData.name ?: "", style = TextStyle(color = GlanceTheme.colors.onSurface))
+                        Text(text = "Hello, ", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        Text(text = widgetData.name ?: "", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
                     }
-                    Text(text = (widgetData.dayCompleted?.toString() ?: "false"), style = TextStyle(color = GlanceTheme.colors.onSurface))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Current streak: ", style = TextStyle(color = GlanceTheme.colors.onSurface))
-                        Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = GlanceTheme.colors.onSurface))
+                    if (widgetData.dayCompleted == true) {
+                        Text(text = "🔥", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 48.sp, fontWeight = FontWeight.Bold))
+                    } else {
+                        Text(text = "❓", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 48.sp, fontWeight = FontWeight.Bold))
                     }
+                    Text(text = "Current streak", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 16.sp))
+                    Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 28.sp, fontWeight = FontWeight.Bold))
                 }
             }
     }
