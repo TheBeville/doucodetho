@@ -23,3 +23,16 @@ simple user interface, so start building that streak today!
 
 <br>
 <img width="300" alt="doucodetho-signup-view" src="https://github.com/user-attachments/assets/9a081fed-6677-4565-8a31-8aefee33ba40" />
+<br><br><br><br>
+
+## NEW: Homescreen Widget
+
+Added in October 2026, the app now has a widget for your homescreen so you can quickly 
+see your current streak and whether the day has been marked as completed or not yet. 
+
+<br><br>
+
+## Planned/Future Features
+
+- Theme customisation
+- Push notification reminders
