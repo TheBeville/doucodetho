@@ -87,8 +87,11 @@ class _HomeViewState extends State<HomeView> {
                                   );
                                 },
                                 style: ButtonStyle(
-                                  backgroundColor:
-                                      WidgetStateProperty.all(Colors.white10),
+                                  backgroundColor: WidgetStateProperty.all(
+                                      Colors.transparent),
+                                  elevation: WidgetStateProperty.all(0),
+                                  foregroundColor: WidgetStateProperty.all(
+                                      Theme.of(context).colorScheme.onSurface),
                                   fixedSize:
                                       WidgetStateProperty.all(Size(200, 250)),
                                   shape: WidgetStateProperty.all(
@@ -104,10 +107,14 @@ class _HomeViewState extends State<HomeView> {
                                       '❓',
                                       style: TextStyle(fontSize: 125),
                                     ),
-                                    const Text(
+                                    Text(
                                       'Tap to complete',
                                       style: TextStyle(
-                                          fontSize: 18, color: Colors.black),
+                                        fontSize: 18,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -147,9 +154,15 @@ class _HomeViewState extends State<HomeView> {
                                         ),
                                       );
                                     },
-                                    child: Text('Undo ↩️',
-                                        style: TextStyle(
-                                            fontSize: 16, color: Colors.black)),
+                                    child: Text(
+                                      'Undo ↩️',
+                                      style: TextStyle(
+                                        fontSize: 16,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onSurface,
+                                      ),
+                                    ),
                                   ),
                                   SizedBox(height: 5),
                                 ],
