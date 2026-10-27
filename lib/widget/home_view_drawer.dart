@@ -1,4 +1,5 @@
 import 'package:doucodetho/auth/auth_service.dart';
+import 'package:doucodetho/cubit/theme_cubit.dart';
 import 'package:doucodetho/cubit/user_info_cubit.dart';
 import 'package:doucodetho/locator.dart';
 import 'package:doucodetho/model/user_info_model.dart';
@@ -36,7 +37,7 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
                       Text(
                         authInfo.email!,
                         style: TextStyle(
-                          color: Colors.grey[800],
+                          color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),
                       ),
                     ],
@@ -44,6 +45,36 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
                 },
               ),
             ),
+          ),
+          SizedBox(height: 10),
+          BlocBuilder<ThemeCubit, ThemeMode>(
+            builder: (context, themeMode) {
+              return SwitchListTile(
+                title: const Text("Dark Mode"),
+                value: themeMode == ThemeMode.dark,
+                activeThumbColor: Colors.green.shade800,
+                activeTrackColor: Colors.green.shade200,
+                thumbColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return Colors.green.shade800;
+                  }
+                  return null;
+                }),
+                trackColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return Colors.green.shade200;
+                  }
+                  return null;
+                }),
+                trackOutlineColor: WidgetStateProperty.resolveWith((states) {
+                  if (states.contains(WidgetState.selected)) {
+                    return Colors.transparent;
+                  }
+                  return null;
+                }),
+                onChanged: (val) => context.read<ThemeCubit>().toggleTheme(val),
+              );
+            },
           ),
           SizedBox(height: 10),
           TextButton(
