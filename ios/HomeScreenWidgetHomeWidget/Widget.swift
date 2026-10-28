@@ -42,13 +42,15 @@ struct HomeScreenWidgetHomeWidgetEntry: TimelineEntry {
 struct HomeScreenWidgetHomeWidgetEntryView: View {
   var entry: Provider.Entry
 
+  @Environment(\.colorScheme) var colorScheme
+
   var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
                 Text("Hello, ")
-                    .font(.system(size: 20.0, weight: .bold)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
+                    .font(.system(size: 20.0, weight: .bold)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
                 Text(entry.data.name ?? "")
-                    .font(.system(size: 20.0, weight: .bold)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
+                    .font(.system(size: 20.0, weight: .bold)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
             }
             if entry.data.dayCompleted == true {
                 Text("🔥")
@@ -58,11 +60,11 @@ struct HomeScreenWidgetHomeWidgetEntryView: View {
                     .font(.system(size: 48.0, weight: .bold))
             }
             Text("Current streak")
-                .font(.system(size: 16.0)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
+                .font(.system(size: 16.0)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
             Text(hwFormatDecimal(NSNumber(value: entry.data.currentStreak ?? 0), minFraction: nil, maxFraction: nil, grouping: true))
-                .font(.system(size: 28.0, weight: .bold)).foregroundColor(Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0))
+                .font(.system(size: 28.0, weight: .bold)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
         }
-    .applyContainerBackground()
+    .applyContainerBackground((colorScheme == .dark ? Color(red: 0.10980392156862745, green: 0.10588235294117647, blue: 0.12156862745098039, opacity: 1.0) : Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0)))
   }
 }
 
@@ -79,13 +81,11 @@ struct HomeScreenWidgetHomeWidget: Widget {
 
 extension View {
   @ViewBuilder
-  func applyContainerBackground() -> some View {
+  func applyContainerBackground<T: View>(_ backgroundView: T) -> some View {
     if #available(iOSApplicationExtension 17.0, *) {
-      self.containerBackground(.fill.tertiary, for: .widget)
-    } else if #available(iOSApplicationExtension 15.0, *) {
-      self.background()
+      self.containerBackground(for: .widget) { backgroundView }
     } else {
-      self
+      self.background(backgroundView)
     }
   }
 }

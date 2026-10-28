@@ -1,3 +1,5 @@
+import 'package:doucodetho/home_widget/home_widget_service.dart';
+import 'package:doucodetho/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,6 +47,8 @@ class ThemeCubit extends Cubit<ThemeMode> {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_prefKey, willBeDark);
+
+    await _updateWidget();
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
@@ -52,5 +56,13 @@ class ThemeCubit extends Cubit<ThemeMode> {
     emit(mode);
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_prefKey, mode == ThemeMode.dark);
+
+    await _updateWidget();
+  }
+
+  Future<void> _updateWidget() async {
+    if (locator.isRegistered<HomeWidgetService>()) {
+      await locator<HomeWidgetService>().refreshWidget();
+    }
   }
 }

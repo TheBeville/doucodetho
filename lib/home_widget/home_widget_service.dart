@@ -15,6 +15,11 @@ class HomeWidgetService {
     await HomeScreenWidgetHomeWidget.updateWidget();
   }
 
+  /// Triggers a widget reload
+  Future<void> refreshWidget() async {
+    await HomeScreenWidgetHomeWidget.updateWidget();
+  }
+
   /// Clears widget data when the user signs out
   Future<void> clearWidgetData() async {
     await HomeScreenWidgetHomeWidget.deleteData(
