@@ -50,7 +50,7 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
     val hwPreviewData =
         HomeScreenWidgetData.fromPreferences(HomeWidgetPlugin.getData(context))
     return listOf(
-      "baf86e78",
+      "37948420",
       hwLocales.joinToString(","),
       hwPreviewData.toString(),
     ).joinToString("|")
@@ -61,19 +61,19 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
     val prefs = currentState.preferences
     val widgetData = HomeScreenWidgetData.fromPreferences(prefs)
     GlanceTheme {
-            Box(modifier = GlanceModifier.background(ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))).padding(16.dp).fillMaxSize().clickable(onClick = actionStartActivity<MainActivity>()), contentAlignment = Alignment.Center) {
+            Box(modifier = GlanceModifier.background(ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF1C1B1F))).padding(16.dp).fillMaxSize().clickable(onClick = actionStartActivity<MainActivity>()), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Hello, ", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
-                        Text(text = widgetData.name ?: "", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        Text(text = "Hello, ", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        Text(text = widgetData.name ?: "", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
                     }
                     if (widgetData.dayCompleted == true) {
                         Text(text = "🔥", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 48.sp, fontWeight = FontWeight.Bold))
                     } else {
                         Text(text = "❓", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 48.sp, fontWeight = FontWeight.Bold))
                     }
-                    Text(text = "Current streak", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 16.sp))
-                    Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000)), fontSize = 28.sp, fontWeight = FontWeight.Bold))
+                    Text(text = "Current streak", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 16.sp))
+                    Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 28.sp, fontWeight = FontWeight.Bold))
                 }
             }
     }
