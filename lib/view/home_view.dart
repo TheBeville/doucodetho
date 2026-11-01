@@ -25,175 +25,228 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      endDrawer: HomeViewDrawer(),
-      body: BlocBuilder<StreakDataCubit, StreakData>(
-        builder: (context, streakData) {
-          bool showButton = !streakData.dayCompleted;
+      endDrawer: const HomeViewDrawer(),
+      body: BlocBuilder<UserInfoCubit, UserInfo>(
+        builder: (context, userInfo) {
+          return Stack(
+            children: [
+              BlocBuilder<StreakDataCubit, StreakData>(
+                builder: (context, streakData) {
+                  bool showButton = !streakData.dayCompleted;
 
-          Future<void> refreshData() async {
-            await context.read<StreakDataCubit>().getStreakData();
-            if (context.mounted) {
-              await context.read<UserInfoCubit>().getUserName();
-            }
-          }
+                  Future<void> refreshData() async {
+                    await context.read<StreakDataCubit>().getStreakData();
+                    if (context.mounted) {
+                      await context
+                          .read<UserInfoCubit>()
+                          .getUserName(isRefresh: true);
+                    }
+                  }
 
-          return RefreshIndicator(
-            onRefresh: refreshData,
-            child: ListView(
-              physics: AlwaysScrollableScrollPhysics(),
-              children: [
-                SizedBox(
-                  height: (MediaQuery.of(context).size.height -
-                          MediaQuery.of(context).padding.top -
-                          kToolbarHeight)
-                      .clamp(0.0, double.infinity),
-                  child: Center(
-                    child: Column(
+                  return RefreshIndicator(
+                    onRefresh: refreshData,
+                    child: ListView(
+                      physics: const AlwaysScrollableScrollPhysics(),
                       children: [
-                        BlocBuilder<UserInfoCubit, UserInfo>(
-                          builder: (context, authInfo) {
-                            return Text(
-                              'Hello, ${authInfo.username}!',
-                              style: TextStyle(
-                                fontSize: 36,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            );
-                          },
-                        ),
-                        Text(
-                          'Do u code tho?',
-                          style: TextStyle(
-                            fontSize: 26,
-                            fontWeight: FontWeight.bold,
-                            fontStyle: FontStyle.italic,
+                        SizedBox(
+                          height: (MediaQuery.of(context).size.height -
+                                  MediaQuery.of(context).padding.top -
+                                  kToolbarHeight)
+                              .clamp(0.0, double.infinity),
+                          child: Center(
+                            child: Column(
+                              children: [
+                                Visibility(
+                                  visible: !userInfo.isLoading &&
+                                      userInfo.username.isNotEmpty,
+                                  maintainSize: true,
+                                  maintainAnimation: true,
+                                  maintainState: true,
+                                  child: Text(
+                                    userInfo.username.isNotEmpty
+                                        ? 'Hello, ${userInfo.username}!'
+                                        : 'Hello!',
+                                    style: const TextStyle(
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                                const Text(
+                                  'Do u code tho?',
+                                  style: TextStyle(
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.bold,
+                                    fontStyle: FontStyle.italic,
+                                  ),
+                                ),
+                                Spacer(flex: 1),
+                                showButton
+                                    ? FilledButton(
+                                        onPressed: () async {
+                                          final messenger =
+                                              ScaffoldMessenger.of(context);
+                                          await context
+                                              .read<StreakDataCubit>()
+                                              .incrementStreaks();
+                                          if (!mounted) return;
+                                          messenger.showSnackBar(
+                                            const SnackBar(
+                                              content: Text(
+                                                  'Good job, day completed!'),
+                                              duration: Duration(seconds: 1),
+                                            ),
+                                          );
+                                        },
+                                        style: ButtonStyle(
+                                          backgroundColor:
+                                              WidgetStateProperty.all(
+                                                  Colors.transparent),
+                                          elevation: WidgetStateProperty.all(0),
+                                          foregroundColor:
+                                              WidgetStateProperty.all(
+                                                  Theme.of(context)
+                                                      .colorScheme
+                                                      .onSurface),
+                                          fixedSize: WidgetStateProperty.all(
+                                              Size(200, 250)),
+                                          shape: WidgetStateProperty.all(
+                                            RoundedRectangleBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(6),
+                                            ),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          children: [
+                                            SizedBox(height: 15),
+                                            Text(
+                                              '❓',
+                                              style: TextStyle(fontSize: 125),
+                                            ),
+                                            Text(
+                                              'Tap to complete',
+                                              style: TextStyle(
+                                                fontSize: 18,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Column(
+                                        children: [
+                                          Text(
+                                            '🔥',
+                                            style: TextStyle(fontSize: 150),
+                                          ),
+                                          Text(
+                                            'Well done!',
+                                            style: TextStyle(
+                                              fontSize: 24,
+                                              fontWeight: FontWeight.bold,
+                                              color: Colors.green,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                showButton
+                                    ? SizedBox(height: 50)
+                                    : Column(
+                                        children: [
+                                          TextButton(
+                                            onPressed: () async {
+                                              final messenger =
+                                                  ScaffoldMessenger.of(context);
+                                              await context
+                                                  .read<StreakDataCubit>()
+                                                  .undoIncrementStreaks();
+                                              if (!mounted) return;
+                                              messenger.showSnackBar(
+                                                const SnackBar(
+                                                  content:
+                                                      Text('Undid completion'),
+                                                  duration:
+                                                      Duration(seconds: 1),
+                                                ),
+                                              );
+                                            },
+                                            child: Text(
+                                              'Undo ↩️',
+                                              style: TextStyle(
+                                                fontSize: 16,
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onSurface,
+                                              ),
+                                            ),
+                                          ),
+                                          SizedBox(height: 5),
+                                        ],
+                                      ),
+                                Text(
+                                  'Current Streak',
+                                  style: TextStyle(fontSize: 22),
+                                ),
+                                Text(
+                                  streakData.current.toString(),
+                                  style: TextStyle(
+                                      fontSize: 56,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                streakData.current != 1
+                                    ? Text(
+                                        'days in a row',
+                                        style: TextStyle(fontSize: 20),
+                                      )
+                                    : Text(
+                                        'day in a row',
+                                        style: TextStyle(fontSize: 20),
+                                      ),
+                                Text('(Longest Streak: ${streakData.longest})'),
+                                Spacer(flex: 2),
+                                SizedBox(height: 25),
+                              ],
+                            ),
                           ),
                         ),
-                        Spacer(flex: 1),
-                        showButton
-                            ? FilledButton(
-                                onPressed: () async {
-                                  final messenger =
-                                      ScaffoldMessenger.of(context);
-                                  await context
-                                      .read<StreakDataCubit>()
-                                      .incrementStreaks();
-                                  if (!mounted) return;
-                                  messenger.showSnackBar(
-                                    const SnackBar(
-                                      content: Text('Good job, day completed!'),
-                                      duration: Duration(seconds: 1),
-                                    ),
-                                  );
-                                },
-                                style: ButtonStyle(
-                                  backgroundColor: WidgetStateProperty.all(
-                                      Colors.transparent),
-                                  elevation: WidgetStateProperty.all(0),
-                                  foregroundColor: WidgetStateProperty.all(
-                                      Theme.of(context).colorScheme.onSurface),
-                                  fixedSize:
-                                      WidgetStateProperty.all(Size(200, 250)),
-                                  shape: WidgetStateProperty.all(
-                                    RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(6),
-                                    ),
-                                  ),
-                                ),
-                                child: Column(
-                                  children: [
-                                    SizedBox(height: 15),
-                                    Text(
-                                      '❓',
-                                      style: TextStyle(fontSize: 125),
-                                    ),
-                                    Text(
-                                      'Tap to complete',
-                                      style: TextStyle(
-                                        fontSize: 18,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              )
-                            : Column(
-                                children: [
-                                  Text(
-                                    '🔥',
-                                    style: TextStyle(fontSize: 150),
-                                  ),
-                                  Text(
-                                    'Well done!',
-                                    style: TextStyle(
-                                      fontSize: 24,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.green,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                        showButton
-                            ? SizedBox(height: 50)
-                            : Column(
-                                children: [
-                                  TextButton(
-                                    onPressed: () async {
-                                      final messenger =
-                                          ScaffoldMessenger.of(context);
-                                      await context
-                                          .read<StreakDataCubit>()
-                                          .undoIncrementStreaks();
-                                      if (!mounted) return;
-                                      messenger.showSnackBar(
-                                        const SnackBar(
-                                          content: Text('Undid completion'),
-                                          duration: Duration(seconds: 1),
-                                        ),
-                                      );
-                                    },
-                                    child: Text(
-                                      'Undo ↩️',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        color: Theme.of(context)
-                                            .colorScheme
-                                            .onSurface,
-                                      ),
-                                    ),
-                                  ),
-                                  SizedBox(height: 5),
-                                ],
-                              ),
-                        Text(
-                          'Current Streak',
-                          style: TextStyle(fontSize: 22),
-                        ),
-                        Text(
-                          streakData.current.toString(),
-                          style: TextStyle(
-                              fontSize: 56, fontWeight: FontWeight.bold),
-                        ),
-                        streakData.current != 1
-                            ? Text(
-                                'days in a row',
-                                style: TextStyle(fontSize: 20),
-                              )
-                            : Text(
-                                'day in a row',
-                                style: TextStyle(fontSize: 20),
-                              ),
-                        Text('(Longest Streak: ${streakData.longest})'),
-                        Spacer(flex: 2),
-                        SizedBox(height: 25),
                       ],
+                    ),
+                  );
+                },
+              ),
+              if (userInfo.isLoading)
+                Positioned.fill(
+                  child: AbsorbPointer(
+                    absorbing: true,
+                    child: ColoredBox(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .surface
+                          .withValues(alpha: 0.85),
+                      child: Center(
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const CircularProgressIndicator(),
+                            const SizedBox(height: 16),
+                            Text(
+                              'Loading user info...',
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.onSurface,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
                 ),
-              ],
-            ),
+            ],
           );
         },
       ),

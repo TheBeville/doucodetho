@@ -25,17 +25,22 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
             child: DrawerHeader(
               child: BlocBuilder<UserInfoCubit, UserInfo>(
                 builder: (context, authInfo) {
+                  if (authInfo.isLoading) {
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
+                  }
                   return Column(
                     children: [
                       Text(
                         authInfo.username,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 36,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                       Text(
-                        authInfo.email!,
+                        authInfo.email ?? '',
                         style: TextStyle(
                           color: Theme.of(context).colorScheme.onSurfaceVariant,
                         ),

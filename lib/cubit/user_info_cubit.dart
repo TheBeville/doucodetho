@@ -6,34 +6,51 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../locator.dart';
 
 class UserInfoCubit extends Cubit<UserInfo> {
-  UserInfoCubit()
+  UserInfoCubit([UserInfo? initialState])
       : super(
-          UserInfo(
-            userID: '',
-            username: '',
-            email: '',
-          ),
+          initialState ??
+              UserInfo(
+                userID: '',
+                username: '',
+                email: '',
+                isLoading: false,
+              ),
         );
 
-  Future<void> getUserName() async {
-    final user = locator<AuthService>().getCurrentUser();
-    final String username;
-
-    if (user != null) {
-      username = await locator<AuthService>().getCurrentUserName(user.id);
-    } else {
-      username = '';
+  Future<void> getUserName({bool isRefresh = false}) async {
+    if (!isRefresh || state.username.isEmpty) {
+      emit(
+        state.copyWith(isLoading: true),
+      );
     }
 
-    emit(
-      UserInfo(
-        userID: user?.id ?? '',
-        username: username,
-        email: user?.email! ?? '',
-      ),
-    );
+    try {
+      final user = locator<AuthService>().getCurrentUser();
+      final String username;
 
-    await locator<HomeWidgetService>().updateWidgetData(name: username);
+      if (user != null) {
+        username = await locator<AuthService>().getCurrentUserName(user.id);
+      } else {
+        username = '';
+      }
+
+      emit(
+        UserInfo(
+          userID: user?.id ?? '',
+          username: username,
+          email: user?.email ?? '',
+          isLoading: false,
+        ),
+      );
+
+      if (locator.isRegistered<HomeWidgetService>()) {
+        await locator<HomeWidgetService>().updateWidgetData(name: username);
+      }
+    } catch (e) {
+      emit(
+        state.copyWith(isLoading: false),
+      );
+    }
   }
 
   Future<void> signOut() async {
@@ -43,9 +60,12 @@ class UserInfoCubit extends Cubit<UserInfo> {
         userID: '',
         username: '',
         email: '',
+        isLoading: false,
       ),
     );
 
-    await locator<HomeWidgetService>().clearWidgetData();
+    if (locator.isRegistered<HomeWidgetService>()) {
+      await locator<HomeWidgetService>().clearWidgetData();
+    }
   }
 }
