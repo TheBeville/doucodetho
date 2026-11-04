@@ -1,6 +1,7 @@
 import 'package:doucodetho/auth/auth_service.dart';
 import 'package:doucodetho/locator.dart';
 import 'package:flutter/material.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginForm extends StatefulWidget {
   const LoginForm({super.key});
@@ -13,6 +14,7 @@ class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
 
   String? _validator(String? value) {
     if (value == null || value.isEmpty) {
@@ -26,22 +28,56 @@ class _LoginFormState extends State<LoginForm> {
     duration: Duration(seconds: 2),
   );
 
-  void _onLoginButtonPressed() {
+  Future<void> _onLoginButtonPressed() async {
     if (_formKey.currentState!.validate()) {
+      setState(() {
+        _isLoading = true;
+      });
+
       try {
-        locator<AuthService>().logInWithEmail(
-          email: emailController.text,
+        await locator<AuthService>().logInWithEmail(
+          email: emailController.text.trim(),
           password: passwordController.text,
         );
-      } catch (e) {
+      } on AuthException catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('$e'),
-            duration: Duration(seconds: 1),
+            content: Text(
+              e.message,
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
           ),
         );
+      } catch (e) {
+        if (!mounted) return;
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              'Login failed: ${e.toString().replaceFirst(RegExp(r'^Exception:\s*'), '')}',
+              style: const TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      } finally {
+        if (mounted) {
+          setState(() {
+            _isLoading = false;
+          });
+        }
       }
-      return;
     }
   }
 
@@ -80,21 +116,30 @@ class _LoginFormState extends State<LoginForm> {
             FilledButton(
               style: ButtonStyle(
                 backgroundColor: WidgetStateProperty.all(Colors.green),
-                fixedSize: WidgetStateProperty.all(Size(355, 50)),
+                fixedSize: WidgetStateProperty.all(const Size(355, 50)),
                 shape: WidgetStateProperty.all(
                   RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(6),
                   ),
                 ),
               ),
-              onPressed: _onLoginButtonPressed,
-              child: Text(
-                'Log In',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
+              onPressed: _isLoading ? null : _onLoginButtonPressed,
+              child: _isLoading
+                  ? const SizedBox(
+                      height: 20,
+                      width: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const Text(
+                      'Log In',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
             ),
             TextButton(
               onPressed: () {
