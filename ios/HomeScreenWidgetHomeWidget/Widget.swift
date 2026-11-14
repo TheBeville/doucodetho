@@ -44,13 +44,24 @@ struct HomeScreenWidgetHomeWidgetEntryView: View {
 
   @Environment(\.colorScheme) var colorScheme
 
+  var isDark: Bool {
+    switch entry.data.themeMode {
+    case "dark":
+      return true
+    case "light":
+      return false
+    default:
+      return colorScheme == .dark
+    }
+  }
+
   var body: some View {
         VStack(alignment: .center, spacing: 0) {
             HStack(alignment: .center, spacing: 0) {
                 Text("Hello, ")
-                    .font(.system(size: 20.0, weight: .bold)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
+                    .font(.system(size: 20.0, weight: .bold)).foregroundColor((isDark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
                 Text(entry.data.name ?? "")
-                    .font(.system(size: 20.0, weight: .bold)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
+                    .font(.system(size: 20.0, weight: .bold)).foregroundColor((isDark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
             }
             if entry.data.dayCompleted == true {
                 Text("🔥")
@@ -60,11 +71,11 @@ struct HomeScreenWidgetHomeWidgetEntryView: View {
                     .font(.system(size: 48.0, weight: .bold))
             }
             Text("Current streak")
-                .font(.system(size: 16.0)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
+                .font(.system(size: 16.0)).foregroundColor((isDark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
             Text(hwFormatDecimal(NSNumber(value: entry.data.currentStreak ?? 0), minFraction: nil, maxFraction: nil, grouping: true))
-                .font(.system(size: 28.0, weight: .bold)).foregroundColor((colorScheme == .dark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
+                .font(.system(size: 28.0, weight: .bold)).foregroundColor((isDark ? Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0) : Color(red: 0.0, green: 0.0, blue: 0.0, opacity: 1.0)))
         }
-    .applyContainerBackground((colorScheme == .dark ? Color(red: 0.10980392156862745, green: 0.10588235294117647, blue: 0.12156862745098039, opacity: 1.0) : Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0)))
+    .applyContainerBackground((isDark ? Color(red: 0.10980392156862745, green: 0.10588235294117647, blue: 0.12156862745098039, opacity: 1.0) : Color(red: 1.0, green: 1.0, blue: 1.0, opacity: 1.0)))
   }
 }
 
@@ -94,6 +105,7 @@ struct HomeScreenWidgetData {
   let name: String?
   let dayCompleted: Bool?
   let currentStreak: Int?
+  let themeMode: String?
 
   static let paramPrefix = "home_widget.HomeScreenWidget"
 
@@ -102,6 +114,7 @@ struct HomeScreenWidgetData {
       name: (defaults?.string(forKey: "\(paramPrefix).name") ?? "User"),
       dayCompleted: (defaults?.object(forKey: "\(paramPrefix).dayCompleted") as? Bool ?? false),
       currentStreak: (defaults?.object(forKey: "\(paramPrefix).currentStreak") as? Int ?? 0),
+      themeMode: (defaults?.string(forKey: "\(paramPrefix).themeMode") ?? "system"),
     )
   }
 }

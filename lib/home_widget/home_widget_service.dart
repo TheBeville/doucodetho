@@ -6,12 +6,20 @@ class HomeWidgetService {
     String? name,
     int? currentStreak,
     bool? dayCompleted,
+    String? themeMode,
   }) async {
     await HomeScreenWidgetHomeWidget.saveData(
       name: name,
       currentStreak: currentStreak,
       dayCompleted: dayCompleted,
+      themeMode: themeMode,
     );
+    await HomeScreenWidgetHomeWidget.updateWidget();
+  }
+
+  /// Updates the widget's theme mode ('light', 'dark', or 'system')
+  Future<void> updateThemeMode(String themeMode) async {
+    await HomeScreenWidgetHomeWidget.saveData(themeMode: themeMode);
     await HomeScreenWidgetHomeWidget.updateWidget();
   }
 

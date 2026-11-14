@@ -54,30 +54,57 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
           SizedBox(height: 10),
           BlocBuilder<ThemeCubit, ThemeMode>(
             builder: (context, themeMode) {
-              return SwitchListTile(
-                title: const Text("Dark Mode"),
-                value: themeMode == ThemeMode.dark,
-                activeThumbColor: Colors.green.shade800,
-                activeTrackColor: Colors.green.shade200,
-                thumbColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return Colors.green.shade800;
-                  }
-                  return null;
-                }),
-                trackColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return Colors.green.shade200;
-                  }
-                  return null;
-                }),
-                trackOutlineColor: WidgetStateProperty.resolveWith((states) {
-                  if (states.contains(WidgetState.selected)) {
-                    return Colors.transparent;
-                  }
-                  return null;
-                }),
-                onChanged: (val) => context.read<ThemeCubit>().toggleTheme(val),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      'Theme',
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    SizedBox(
+                      width: double.infinity,
+                      child: SegmentedButton<ThemeMode>(
+                        selected: {themeMode},
+                        showSelectedIcon: false,
+                        style: SegmentedButton.styleFrom(
+                          selectedBackgroundColor: Colors.green.shade700,
+                          selectedForegroundColor: Colors.white,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(8),
+                          ),
+                        ),
+                        segments: const [
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.system,
+                            icon: Icon(Icons.brightness_auto, size: 18),
+                            label: Text('System'),
+                          ),
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.light,
+                            icon: Icon(Icons.light_mode, size: 18),
+                            label: Text('Light'),
+                          ),
+                          ButtonSegment<ThemeMode>(
+                            value: ThemeMode.dark,
+                            icon: Icon(Icons.dark_mode, size: 18),
+                            label: Text('Dark'),
+                          ),
+                        ],
+                        onSelectionChanged: (newSelection) {
+                          context
+                              .read<ThemeCubit>()
+                              .setThemeMode(newSelection.first);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),

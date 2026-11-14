@@ -5,64 +5,71 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class ThemeCubit extends Cubit<ThemeMode> {
-  static const String _prefKey = 'is_dark_mode';
+  static const String _prefKey = 'theme_mode';
+  static const String _legacyPrefKey = 'is_dark_mode';
 
   ThemeCubit([ThemeMode? initialMode])
-      : super(initialMode ?? _getDeviceThemeMode()) {
+      : super(initialMode ?? ThemeMode.system) {
     if (initialMode == null) {
       loadTheme();
     }
   }
 
-  static ThemeMode _getDeviceThemeMode() {
-    final brightness =
-        WidgetsBinding.instance.platformDispatcher.platformBrightness;
-    return brightness == Brightness.dark ? ThemeMode.dark : ThemeMode.light;
+  bool get isDarkMode {
+    if (state == ThemeMode.system) {
+      final brightness =
+          WidgetsBinding.instance.platformDispatcher.platformBrightness;
+      return brightness == Brightness.dark;
+    }
+    return state == ThemeMode.dark;
   }
-
-  bool get isDarkMode => state == ThemeMode.dark;
 
   Future<void> loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    final bool? isDark = prefs.getBool(_prefKey) ??
-        prefs.getBool('isDarkMode') ??
-        (prefs.containsKey('theme_mode')
-            ? prefs.getString('theme_mode') == 'dark'
-            : null);
+    final String? savedThemeMode = prefs.getString(_prefKey);
 
     if (isClosed) return;
 
-    if (isDark != null) {
-      emit(isDark ? ThemeMode.dark : ThemeMode.light);
+    if (savedThemeMode == 'dark') {
+      emit(ThemeMode.dark);
+    } else if (savedThemeMode == 'light') {
+      emit(ThemeMode.light);
+    } else if (savedThemeMode == 'system') {
+      emit(ThemeMode.system);
     } else {
-      emit(_getDeviceThemeMode());
+      final bool? isDark =
+          prefs.getBool(_legacyPrefKey) ?? prefs.getBool('isDarkMode');
+      if (isDark != null) {
+        emit(isDark ? ThemeMode.dark : ThemeMode.light);
+      } else {
+        emit(ThemeMode.system);
+      }
     }
-  }
-
-  Future<void> toggleTheme([bool? isDark]) async {
-    final bool willBeDark = isDark ?? (state != ThemeMode.dark);
-    final newMode = willBeDark ? ThemeMode.dark : ThemeMode.light;
-    if (isClosed) return;
-    emit(newMode);
-
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_prefKey, willBeDark);
-
-    await _updateWidget();
   }
 
   Future<void> setThemeMode(ThemeMode mode) async {
     if (isClosed) return;
     emit(mode);
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setBool(_prefKey, mode == ThemeMode.dark);
+    final String modeString = switch (mode) {
+      ThemeMode.dark => 'dark',
+      ThemeMode.light => 'light',
+      ThemeMode.system => 'system',
+    };
+    await prefs.setString(_prefKey, modeString);
+    await prefs.setBool(_legacyPrefKey, mode == ThemeMode.dark);
 
-    await _updateWidget();
+    await _updateWidget(modeString);
   }
 
-  Future<void> _updateWidget() async {
+  Future<void> toggleTheme([bool? isDark]) async {
+    final bool willBeDark = isDark ?? (state != ThemeMode.dark);
+    await setThemeMode(willBeDark ? ThemeMode.dark : ThemeMode.light);
+  }
+
+  Future<void> _updateWidget(String themeModeString) async {
     if (locator.isRegistered<HomeWidgetService>()) {
-      await locator<HomeWidgetService>().refreshWidget();
+      await locator<HomeWidgetService>().updateThemeMode(themeModeString);
     }
   }
 }

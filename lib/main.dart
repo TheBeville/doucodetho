@@ -20,18 +20,26 @@ void main() async {
   );
   setupLocator();
   final prefs = await SharedPreferences.getInstance();
-  final bool? savedIsDark = prefs.getBool('is_dark_mode') ??
-      prefs.getBool('isDarkMode') ??
-      (prefs.containsKey('theme_mode')
-          ? prefs.getString('theme_mode') == 'dark'
-          : null);
-
-  final bool isDarkMode = savedIsDark ??
-      (WidgetsBinding.instance.platformDispatcher.platformBrightness ==
-          Brightness.dark);
+  final String? savedThemeMode = prefs.getString('theme_mode');
+  final ThemeMode initialThemeMode;
+  if (savedThemeMode == 'dark') {
+    initialThemeMode = ThemeMode.dark;
+  } else if (savedThemeMode == 'light') {
+    initialThemeMode = ThemeMode.light;
+  } else if (savedThemeMode == 'system') {
+    initialThemeMode = ThemeMode.system;
+  } else {
+    final bool? savedIsDark =
+        prefs.getBool('is_dark_mode') ?? prefs.getBool('isDarkMode');
+    if (savedIsDark != null) {
+      initialThemeMode = savedIsDark ? ThemeMode.dark : ThemeMode.light;
+    } else {
+      initialThemeMode = ThemeMode.system;
+    }
+  }
 
   runApp(MainApp(
-    initialThemeMode: isDarkMode ? ThemeMode.dark : ThemeMode.light,
+    initialThemeMode: initialThemeMode,
   ));
 }
 
