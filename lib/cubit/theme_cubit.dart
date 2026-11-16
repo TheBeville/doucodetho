@@ -15,6 +15,29 @@ class ThemeCubit extends Cubit<ThemeMode> {
     }
   }
 
+  /// Retrieves the saved [ThemeMode] from [SharedPreferences], falling back to
+  /// legacy preferences or [ThemeMode.system].
+  static Future<ThemeMode> getSavedThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final String? savedThemeMode = prefs.getString(_prefKey);
+
+    if (savedThemeMode == 'dark') {
+      return ThemeMode.dark;
+    } else if (savedThemeMode == 'light') {
+      return ThemeMode.light;
+    } else if (savedThemeMode == 'system') {
+      return ThemeMode.system;
+    }
+
+    final bool? isDark =
+        prefs.getBool(_legacyPrefKey) ?? prefs.getBool('isDarkMode');
+    if (isDark != null) {
+      return isDark ? ThemeMode.dark : ThemeMode.light;
+    }
+
+    return ThemeMode.system;
+  }
+
   bool get isDarkMode {
     if (state == ThemeMode.system) {
       final brightness =
@@ -25,25 +48,9 @@ class ThemeCubit extends Cubit<ThemeMode> {
   }
 
   Future<void> loadTheme() async {
-    final prefs = await SharedPreferences.getInstance();
-    final String? savedThemeMode = prefs.getString(_prefKey);
-
-    if (isClosed) return;
-
-    if (savedThemeMode == 'dark') {
-      emit(ThemeMode.dark);
-    } else if (savedThemeMode == 'light') {
-      emit(ThemeMode.light);
-    } else if (savedThemeMode == 'system') {
-      emit(ThemeMode.system);
-    } else {
-      final bool? isDark =
-          prefs.getBool(_legacyPrefKey) ?? prefs.getBool('isDarkMode');
-      if (isDark != null) {
-        emit(isDark ? ThemeMode.dark : ThemeMode.light);
-      } else {
-        emit(ThemeMode.system);
-      }
+    final mode = await getSavedThemeMode();
+    if (!isClosed) {
+      emit(mode);
     }
   }
 

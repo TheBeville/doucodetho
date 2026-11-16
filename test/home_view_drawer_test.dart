@@ -32,7 +32,7 @@ void main() {
     final segmentedButtonFinder = find.byType(SegmentedButton<ThemeMode>);
     expect(segmentedButtonFinder, findsOneWidget);
 
-    expect(find.text('System'), findsOneWidget);
+    expect(find.text('Auto'), findsOneWidget);
     expect(find.text('Light'), findsOneWidget);
     expect(find.text('Dark'), findsOneWidget);
 
@@ -48,8 +48,8 @@ void main() {
     segmentedButton = tester.widget(segmentedButtonFinder);
     expect(segmentedButton.selected, {ThemeMode.dark});
 
-    // Tap 'System' segment
-    await tester.tap(find.text('System'));
+    // Tap 'Auto' segment
+    await tester.tap(find.text('Auto'));
     await tester.pumpAndSettle();
 
     expect(themeCubit.state, ThemeMode.system);

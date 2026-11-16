@@ -54,6 +54,26 @@ void main() {
       await cubit.close();
     });
 
+    test('getSavedThemeMode returns correct ThemeMode statically', () async {
+      SharedPreferences.setMockInitialValues({'theme_mode': 'dark'});
+      expect(await ThemeCubit.getSavedThemeMode(), ThemeMode.dark);
+
+      SharedPreferences.setMockInitialValues({'theme_mode': 'light'});
+      expect(await ThemeCubit.getSavedThemeMode(), ThemeMode.light);
+
+      SharedPreferences.setMockInitialValues({'theme_mode': 'system'});
+      expect(await ThemeCubit.getSavedThemeMode(), ThemeMode.system);
+
+      SharedPreferences.setMockInitialValues({'is_dark_mode': true});
+      expect(await ThemeCubit.getSavedThemeMode(), ThemeMode.dark);
+
+      SharedPreferences.setMockInitialValues({'isDarkMode': false});
+      expect(await ThemeCubit.getSavedThemeMode(), ThemeMode.light);
+
+      SharedPreferences.setMockInitialValues({});
+      expect(await ThemeCubit.getSavedThemeMode(), ThemeMode.system);
+    });
+
     test('setThemeMode updates state and saves to SharedPreferences', () async {
       SharedPreferences.setMockInitialValues({});
       final cubit = ThemeCubit(ThemeMode.light);

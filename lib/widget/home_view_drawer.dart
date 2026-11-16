@@ -83,7 +83,7 @@ class _HomeViewDrawerState extends State<HomeViewDrawer> {
                           ButtonSegment<ThemeMode>(
                             value: ThemeMode.system,
                             icon: Icon(Icons.brightness_auto, size: 18),
-                            label: Text('System'),
+                            label: Text('Auto'),
                           ),
                           ButtonSegment<ThemeMode>(
                             value: ThemeMode.light,
