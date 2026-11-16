@@ -61,6 +61,7 @@ class FakeAuthService implements AuthService {
 
 class FakeHomeWidgetService implements HomeWidgetService {
   String? savedName;
+  String? savedThemeMode;
   bool cleared = false;
 
   @override
@@ -68,8 +69,15 @@ class FakeHomeWidgetService implements HomeWidgetService {
     String? name,
     int? currentStreak,
     bool? dayCompleted,
+    String? themeMode,
   }) async {
     savedName = name;
+    savedThemeMode = themeMode;
+  }
+
+  @override
+  Future<void> updateThemeMode(String themeMode) async {
+    savedThemeMode = themeMode;
   }
 
   @override

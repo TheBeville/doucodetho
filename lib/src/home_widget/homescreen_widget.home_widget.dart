@@ -15,11 +15,24 @@ class HomeScreenWidgetHomeWidget {
     String? name,
     bool? dayCompleted,
     int? currentStreak,
+    String? themeMode,
   }) {
     return Future.wait([
-      if (name != null) HomeWidget.saveWidgetData<String>('${_$paramPrefix}.name', name, appGroupId: _$appGroupId),
-      if (dayCompleted != null) HomeWidget.saveWidgetData<bool>('${_$paramPrefix}.dayCompleted', dayCompleted, appGroupId: _$appGroupId),
-      if (currentStreak != null) HomeWidget.saveWidgetData<int>('${_$paramPrefix}.currentStreak', currentStreak, appGroupId: _$appGroupId),
+      if (name != null)
+        HomeWidget.saveWidgetData<String>('${_$paramPrefix}.name', name,
+            appGroupId: _$appGroupId),
+      if (dayCompleted != null)
+        HomeWidget.saveWidgetData<bool>(
+            '${_$paramPrefix}.dayCompleted', dayCompleted,
+            appGroupId: _$appGroupId),
+      if (currentStreak != null)
+        HomeWidget.saveWidgetData<int>(
+            '${_$paramPrefix}.currentStreak', currentStreak,
+            appGroupId: _$appGroupId),
+      if (themeMode != null)
+        HomeWidget.saveWidgetData<String>(
+            '${_$paramPrefix}.themeMode', themeMode,
+            appGroupId: _$appGroupId),
     ]);
   }
 
@@ -27,22 +40,48 @@ class HomeScreenWidgetHomeWidget {
     bool name = false,
     bool dayCompleted = false,
     bool currentStreak = false,
+    bool themeMode = false,
   }) {
     return Future.wait([
-      if (name) HomeWidget.saveWidgetData('${_$paramPrefix}.name', null, appGroupId: _$appGroupId),
-      if (dayCompleted) HomeWidget.saveWidgetData('${_$paramPrefix}.dayCompleted', null, appGroupId: _$appGroupId),
-      if (currentStreak) HomeWidget.saveWidgetData('${_$paramPrefix}.currentStreak', null, appGroupId: _$appGroupId),
+      if (name)
+        HomeWidget.saveWidgetData('${_$paramPrefix}.name', null,
+            appGroupId: _$appGroupId),
+      if (dayCompleted)
+        HomeWidget.saveWidgetData('${_$paramPrefix}.dayCompleted', null,
+            appGroupId: _$appGroupId),
+      if (currentStreak)
+        HomeWidget.saveWidgetData('${_$paramPrefix}.currentStreak', null,
+            appGroupId: _$appGroupId),
+      if (themeMode)
+        HomeWidget.saveWidgetData('${_$paramPrefix}.themeMode', null,
+            appGroupId: _$appGroupId),
     ]);
   }
 
-  static Future<({String? name, bool? dayCompleted, int? currentStreak})> getData() async {
+  static Future<
+      ({
+        String? name,
+        bool? dayCompleted,
+        int? currentStreak,
+        String? themeMode
+      })> getData() async {
     return (
-      name: await HomeWidget.getWidgetData<String>('${_$paramPrefix}.name', defaultValue: 'User', appGroupId: _$appGroupId),
-      dayCompleted: await HomeWidget.getWidgetData<bool>('${_$paramPrefix}.dayCompleted', defaultValue: false, appGroupId: _$appGroupId),
-      currentStreak: await HomeWidget.getWidgetData<int>('${_$paramPrefix}.currentStreak', defaultValue: 0, appGroupId: _$appGroupId),
+      name: await HomeWidget.getWidgetData<String>('${_$paramPrefix}.name',
+          defaultValue: 'User', appGroupId: _$appGroupId),
+      dayCompleted: await HomeWidget.getWidgetData<bool>(
+          '${_$paramPrefix}.dayCompleted',
+          defaultValue: false,
+          appGroupId: _$appGroupId),
+      currentStreak: await HomeWidget.getWidgetData<int>(
+          '${_$paramPrefix}.currentStreak',
+          defaultValue: 0,
+          appGroupId: _$appGroupId),
+      themeMode: await HomeWidget.getWidgetData<String>(
+          '${_$paramPrefix}.themeMode',
+          defaultValue: 'system',
+          appGroupId: _$appGroupId),
     );
   }
-
 
   static Future<bool?> updateWidget() {
     return HomeWidget.updateWidget(
@@ -59,8 +98,9 @@ class HomeScreenWidgetHomeWidget {
   /// needed after data changes that should show in the gallery right away.
   static Future<bool> updatePreview() async {
     return await HomeWidget.updateWidgetPreview(
-      androidName: 'HomeScreenWidgetHomeWidgetReceiver',
-    ) ?? false;
+          androidName: 'HomeScreenWidgetHomeWidgetReceiver',
+        ) ??
+        false;
   }
 
   /// Whether the launcher lets the app ask to add this widget to the home

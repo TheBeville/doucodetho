@@ -9,7 +9,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  testWidgets('HomeViewDrawer dark mode switch toggles theme', (tester) async {
+  testWidgets('HomeViewDrawer segmented button updates theme mode',
+      (tester) async {
     SharedPreferences.setMockInitialValues({});
     final themeCubit = ThemeCubit(ThemeMode.light);
     final userInfoCubit = UserInfoCubit();
@@ -28,24 +29,32 @@ void main() {
       ),
     );
 
-    final switchFinder = find.byType(Switch);
-    expect(switchFinder, findsOneWidget);
+    final segmentedButtonFinder = find.byType(SegmentedButton<ThemeMode>);
+    expect(segmentedButtonFinder, findsOneWidget);
 
-    Switch switchWidget = tester.widget(switchFinder);
-    expect(switchWidget.value, isFalse);
+    expect(find.text('Auto'), findsOneWidget);
+    expect(find.text('Light'), findsOneWidget);
+    expect(find.text('Dark'), findsOneWidget);
 
-    // Tap the switch to toggle to dark mode
-    await tester.tap(switchFinder);
+    SegmentedButton<ThemeMode> segmentedButton =
+        tester.widget(segmentedButtonFinder);
+    expect(segmentedButton.selected, {ThemeMode.light});
+
+    // Tap 'Dark' segment
+    await tester.tap(find.text('Dark'));
     await tester.pumpAndSettle();
 
     expect(themeCubit.state, ThemeMode.dark);
+    segmentedButton = tester.widget(segmentedButtonFinder);
+    expect(segmentedButton.selected, {ThemeMode.dark});
 
-    switchWidget = tester.widget(switchFinder);
-    expect(switchWidget.value, isTrue);
-    expect(switchWidget.thumbColor?.resolve({WidgetState.selected}),
-        Colors.green.shade800);
-    expect(switchWidget.trackColor?.resolve({WidgetState.selected}),
-        Colors.green.shade200);
+    // Tap 'Auto' segment
+    await tester.tap(find.text('Auto'));
+    await tester.pumpAndSettle();
+
+    expect(themeCubit.state, ThemeMode.system);
+    segmentedButton = tester.widget(segmentedButtonFinder);
+    expect(segmentedButton.selected, {ThemeMode.system});
 
     await themeCubit.close();
     await userInfoCubit.close();

@@ -60,20 +60,32 @@ class HomeScreenWidgetHomeWidget : GlanceAppWidget() {
   private fun WidgetContent(context: Context, currentState: HomeWidgetGlanceState) {
     val prefs = currentState.preferences
     val widgetData = HomeScreenWidgetData.fromPreferences(prefs)
+
+    val bgColor = when (widgetData.themeMode) {
+        "dark" -> ColorProvider(day = Color(0xFF1C1B1F), night = Color(0xFF1C1B1F))
+        "light" -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
+        else -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF1C1B1F))
+    }
+    val textColor = when (widgetData.themeMode) {
+        "dark" -> ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFFFFFFFF))
+        "light" -> ColorProvider(day = Color(0xFF000000), night = Color(0xFF000000))
+        else -> ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF))
+    }
+
     GlanceTheme {
-            Box(modifier = GlanceModifier.background(ColorProvider(day = Color(0xFFFFFFFF), night = Color(0xFF1C1B1F))).padding(16.dp).fillMaxSize().clickable(onClick = actionStartActivity<MainActivity>()), contentAlignment = Alignment.Center) {
+            Box(modifier = GlanceModifier.background(bgColor).padding(16.dp).fillMaxSize().clickable(onClick = actionStartActivity<MainActivity>()), contentAlignment = Alignment.Center) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(text = "Hello, ", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
-                        Text(text = widgetData.name ?: "", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        Text(text = "Hello, ", style = TextStyle(color = textColor, fontSize = 20.sp, fontWeight = FontWeight.Bold))
+                        Text(text = widgetData.name ?: "", style = TextStyle(color = textColor, fontSize = 20.sp, fontWeight = FontWeight.Bold))
                     }
                     if (widgetData.dayCompleted == true) {
                         Text(text = "🔥", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 48.sp, fontWeight = FontWeight.Bold))
                     } else {
                         Text(text = "❓", style = TextStyle(color = GlanceTheme.colors.onSurface, fontSize = 48.sp, fontWeight = FontWeight.Bold))
                     }
-                    Text(text = "Current streak", style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 16.sp))
-                    Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = ColorProvider(day = Color(0xFF000000), night = Color(0xFFFFFFFF)), fontSize = 28.sp, fontWeight = FontWeight.Bold))
+                    Text(text = "Current streak", style = TextStyle(color = textColor, fontSize = 16.sp))
+                    Text(text = hwFormatDecimal((widgetData.currentStreak ?: 0L), null, null, true, hwFormatLocale(context)), style = TextStyle(color = textColor, fontSize = 28.sp, fontWeight = FontWeight.Bold))
                 }
             }
     }
@@ -85,6 +97,7 @@ data class HomeScreenWidgetData(
     val name: String? = null,
     val dayCompleted: Boolean? = null,
     val currentStreak: Long? = null,
+    val themeMode: String? = null,
 ) {
     companion object {
         private const val PREFERENCES_PREFIX = "home_widget.HomeScreenWidget"
@@ -94,6 +107,7 @@ data class HomeScreenWidgetData(
                 name = prefs.getString("${PREFERENCES_PREFIX}.name", "User"),
                 dayCompleted = if (prefs.contains("${PREFERENCES_PREFIX}.dayCompleted")) prefs.getBoolean("${PREFERENCES_PREFIX}.dayCompleted", false) else false,
                 currentStreak = if (prefs.contains("${PREFERENCES_PREFIX}.currentStreak")) (try { prefs.getInt("${PREFERENCES_PREFIX}.currentStreak", 0).toLong() } catch (_: ClassCastException) { prefs.getLong("${PREFERENCES_PREFIX}.currentStreak", 0L) }) else 0L,
+                themeMode = prefs.getString("${PREFERENCES_PREFIX}.themeMode", "system"),
             )
         }
     }
